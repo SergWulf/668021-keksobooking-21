@@ -1,6 +1,6 @@
 'use strict';
 
-const COUNT_REAL_ESATE = 8;
+const COUNT_REAL_ESTATE = 8;
 const MIN_PRICE = 1000;
 const MAX_PRICE = 1000000;
 const MIN_COUNT_ROOMS = 1;
@@ -15,7 +15,7 @@ const MIN_COORDINATE_X = 0 + COORDINATE_PIN_X;
 const MAX_COORDINATE_X = document.querySelector('.map').clientWidth - COORDINATE_PIN_X;
 
 
-const titlesResidence = [
+const TITLES_RESIDENCE = [
   'Большая уютная квартира',
   'Маленькая неуютная квартира',
   'Огромный прекрасный дворец',
@@ -26,7 +26,7 @@ const titlesResidence = [
   'Неуютное бунгало по колено в воде'
 ];
 
-const listFeatures = [
+const LIST_FEATURES = [
   'wifi',
   'dishwasher',
   'washer',
@@ -35,22 +35,20 @@ const listFeatures = [
   'conditioner'
 ];
 
-const listCheckInOut = ['12:00', '13:00', '14:00'];
+const LIST_CHECK_IN_OUT = ['12:00', '13:00', '14:00'];
 
-const listPhotos = [
+const LIST_PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
 
-const typeResidence = {
+const TYPE_RESIDENCE = {
   'palace': 'Дворец',
   'house': 'Дом',
   'bungalow': 'Бунгало',
   'flat': 'Квартира'
 };
-
-//let realEstates = [];
 
 // Функция перемешивания массива, благополучно взятая из харбра, по совету, чтобы не изобретать велосипед :)
 const shuffle = function (arr) {
@@ -77,8 +75,8 @@ const getRandomElementOfArray = function (listElements) {
 
 // Функция, которая ищет в названии тип недвижимости и возвращает его в удобочитаемом виде
 const getTypeResidence = function (titleTypeResidence) {
-  for (let key in typeResidence) {
-    if ((titleTypeResidence.toLowerCase().indexOf(typeResidence[key].toLowerCase())) !== -1) {
+  for (let key in TYPE_RESIDENCE) {
+    if ((titleTypeResidence.toLowerCase().indexOf(TYPE_RESIDENCE[key].toLowerCase())) !== -1) {
       return key;
     }
   }
@@ -100,16 +98,16 @@ const createRealEstates = function (count) {
         'avatar': getPathImageAvatar(i + 1)
       },
       'offer': {
-        'title': titlesResidence[i],
+        'title': TITLES_RESIDENCE[i],
         'price': getRandomNumberRange(MIN_PRICE, MAX_PRICE),
-        'type': getTypeResidence(titlesResidence[i]),
+        'type': getTypeResidence(TITLES_RESIDENCE[i]),
         'rooms': getRandomNumberRange(MIN_COUNT_ROOMS, MAX_COUNT_ROOMS),
         'guests': getRandomNumberRange(MIN_COUNT_GUESTS, MAX_COUNT_GUESTS),
-        'checkin': listCheckInOut[getRandomElementOfArray(listCheckInOut)],
-        'checkout': listCheckInOut[getRandomElementOfArray(listCheckInOut)],
-        'features': shuffle(listFeatures).slice(Math.round(Math.random() * (listFeatures.length - 1))),
+        'checkin': LIST_CHECK_IN_OUT[getRandomElementOfArray(LIST_CHECK_IN_OUT)],
+        'checkout': LIST_CHECK_IN_OUT[getRandomElementOfArray(LIST_CHECK_IN_OUT)],
+        'features': shuffle(LIST_FEATURES).slice(Math.round(Math.random() * (LIST_FEATURES.length - 1))),
         'description': '',
-        'photos': shuffle(listPhotos)
+        'photos': shuffle(LIST_PHOTOS)
       },
       'location': {
         'x': getRandomNumberRange(MIN_COORDINATE_X, MAX_COORDINATE_X),
@@ -123,7 +121,7 @@ const createRealEstates = function (count) {
 };
 
 // Создание объектов JS на основе созданных данных
-const realEstates = createRealEstates(COUNT_REAL_ESATE);
+const realEstates = createRealEstates(COUNT_REAL_ESTATE);
 
 // Переключаем карту в активное состояние
 const mapAdverts = document.querySelector('.map');
@@ -165,7 +163,7 @@ const renderCard = function (realEstateCard) {
   cardElement.querySelector('.popup__title').textContent = realEstateCard['offer']['title'];
   cardElement.querySelector('.popup__text--address').textContent = realEstateCard['offer']['address'];
   cardElement.querySelector('.popup__text--price').innerHTML = realEstateCard['offer']['price'] + '&#x20bd;' + '<span>/ночь</span>';
-  cardElement.querySelector('.popup__type').textContent = typeResidence[realEstateCard['offer']['type']];
+  cardElement.querySelector('.popup__type').textContent = TYPE_RESIDENCE[realEstateCard['offer']['type']];
   cardElement.querySelector('.popup__text--capacity').textContent = realEstateCard['offer']['rooms'] + ' комнаты для ' + realEstateCard['offer']['guests'] + ' гостей';
   cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + realEstateCard['offer']['checkin'] + ', выездо до ' + realEstateCard['offer']['checkout'];
   // В разметке находим блок предоставления услуг
@@ -183,9 +181,9 @@ const renderCard = function (realEstateCard) {
   cardElement.querySelector('.popup__description').textContent = realEstateCard['offer']['description'];
   // Добавляем фотографии в карточку объекта недвижимости
   const popupPhotos = cardElement.querySelector('.popup__photos');
-  for (let j = 0; j < realEstateCard['offer']['photos'].length; j++) {
+  for (let i = 0; i < realEstateCard['offer']['photos'].length; i++) {
     const popupPhoto = popupPhotos.querySelector('img').cloneNode(true);
-    popupPhoto.src = realEstateCard['offer']['photos'][j];
+    popupPhoto.src = realEstateCard['offer']['photos'][i];
     popupPhotos.appendChild(popupPhoto);
   }
   popupPhotos.removeChild(popupPhotos.children[0]);

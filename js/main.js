@@ -13,6 +13,8 @@ const MIN_COORDINATE_Y = 130 + COORDINATE_PIN_Y;
 const MAX_COORDINATE_Y = 630 - COORDINATE_PIN_Y;
 const MIN_COORDINATE_X = 0 + COORDINATE_PIN_X;
 const MAX_COORDINATE_X = document.querySelector('.map').clientWidth - COORDINATE_PIN_X;
+const HALF_WIDTH_MAIN_PIN = 31;
+const HALF_HEIGHT_MAIN_PIN = 31;
 
 
 const TITLES_RESIDENCE = [
@@ -49,6 +51,8 @@ const TYPE_RESIDENCE = {
   'bungalow': 'Бунгало',
   'flat': 'Квартира'
 };
+
+let realEstates = [];
 
 // Функция перемешивания массива, благополучно взятая из харбра, по совету, чтобы не изобретать велосипед :)
 const shuffle = function (arr) {
@@ -120,12 +124,15 @@ const createRealEstates = function (count) {
   return listRealEstate;
 };
 
+/*
+
 // Создание объектов JS на основе созданных данных
-const realEstates = createRealEstates(COUNT_REAL_ESTATE);
+ let realEstates = createRealEstates(COUNT_REAL_ESTATE);
 
 // Переключаем карту в активное состояние
 const mapAdverts = document.querySelector('.map');
 mapAdverts.classList.remove('map--faded');
+*/
 
 // Создаем шаблон для отображения метки на карте
 const pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
@@ -144,15 +151,19 @@ const renderPin = function (realEstatePin) {
 // Функция отрисовки всех меток во фрагмент
 const renderPins = function (realEstatesPin) {
   const fragment = document.createDocumentFragment();
-  for (let j = 0; j < realEstatesPin.length; j++) {
-    fragment.appendChild(renderPin(realEstatesPin[j]));
+  for (let i = 0; i < realEstatesPin.length; i++) {
+    const newPinElement = renderPin(realEstatesPin[i]);
+    newPinElement.setAttribute('data-index', i);
+    fragment.appendChild(newPinElement);
   }
   return fragment;
 };
 
+/*
 // Находим блок, где будем отображать метки и вставляем их в виде фрагмента
 const blockPins = document.querySelector('.map__pins');
 blockPins.appendChild(renderPins(realEstates));
+*/
 
 // Создаем шаблон для отображения карточки объекта недвижимости
 const cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
@@ -247,7 +258,83 @@ var renderCards = function (realEstatesCard) {
   }
   return fragment;
 };
-*/
+
 
 // Отображаем первую карточку
 mapAdverts.insertBefore(renderCard(realEstates[0]), mapAdverts.children[1]);
+*/
+
+// Находим форму объявлений и блок фильтров в DOM
+const formAd = document.querySelector('.ad-form');
+const formFilters = document.querySelector('.map__filters');
+
+// Блокируем изменение атрибутов формы
+for (let i = 0; i < formAd.children.length; i++) {
+  formAd.children[i].setAttribute('disabled', 'disabled');
+}
+
+// Блокируем изменение атрибутов блока фильтров
+for (let i = 0; i < formFilters.children.length; i++) {
+  formFilters.children[i].setAttribute('disabled', 'disabled');
+}
+
+// Находим карту объявлений и главную метку в DOM
+const mapAdverts = document.querySelector('.map');
+const mapPin = document.querySelector('.map__pin--main');
+
+// Функция обработчик - срабатывает, когда пользователь отпускает кнопку мыши с главной метки.
+const buttonMouseUpHandlerCreatePins = function () {
+  // Создание объектов JS на основе созданных данных
+  realEstates = createRealEstates(COUNT_REAL_ESTATE);
+  // Находим блок, где будем отображать метки и отображаем их
+  const blockPins = document.querySelector('.map__pins');
+  blockPins.appendChild(renderPins(realEstates));
+  // Удаляем обработчик
+  mapPin.removeEventListener('mouseup', buttonMouseUpHandlerCreatePins);
+};
+
+/*
+ Функция обработчик - срабатывает, когда пользователь (нажимает)отпускает кнопку мыши:
+ происходит активация карты, блока фильтров и формы объявлений.
+*/
+const buttonMouseUpHandler = function () {
+  mapAdverts.classList.remove('map--faded');
+  formAd.classList.remove('ad-form--disabled');
+  formFilters.classList.remove('ad-form--disabled');
+  for (let i = 0; i < formAd.children.length; i++) {
+    formAd.children[i].removeAttribute('disabled');
+  }
+  for (let i = 0; i < formFilters.children.length; i++) {
+    formFilters.children[i].removeAttribute('disabled');
+  }
+  // Задание 2. Узнать координаты метки.
+  // Узнать координаты первой метки
+  // Вычислить координаты ее центра
+  const leftMapPin = mapPin.offsetLeft + HALF_WIDTH_MAIN_PIN;
+  const topMapPin = mapPin.offsetTop + HALF_HEIGHT_MAIN_PIN;
+  // Записать данные координат в форму объявления
+  formAd.querySelector('#address').setAttribute('value', leftMapPin + ', ' + topMapPin);
+};
+
+// Вешаем 2 обработчика событий на главную метку
+mapPin.addEventListener('mouseup', buttonMouseUpHandlerCreatePins);
+mapPin.addEventListener('mouseup', buttonMouseUpHandler);
+
+// Обработчик события клика мыши на метке для отображения карточки объявления
+mapAdverts.addEventListener('click', function (evt) {
+  // Опеределяем, где именно произошло событие
+  let target = evt.target;
+  // Если на изображении метки, то присваем его предку (button)(самой метке)
+  if (target.tagName === 'IMG') {
+    target = target.parentNode;
+  }
+  // Если метка содержит класс 'map__pin' и не содержит класс 'map__pin--main', то есть не является главной
+  if ((target.classList.contains('map__pin')) && (!target.classList.contains('map__pin--main'))) {
+    // Если есть карточка с характеристиками обьявления, то удаляем ее из разметки
+    if (mapAdverts.querySelector('.map__card')) {
+      mapAdverts.removeChild(mapAdverts.querySelector('.map__card'));
+    }
+    // Отображаем карточку объявлений соответствующую метке.
+    mapAdverts.insertBefore(renderCard(realEstates[target.dataset.index]), mapAdverts.children[1]);
+  }
+});

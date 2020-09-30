@@ -64,7 +64,10 @@ const shuffle = function (arr) {
     arr[j] = arr[i];
     arr[i] = temp;
   }
-  return arr;
+  // Возвращаем именн копию массива, а не ссылку,
+  // в противном случае все объекты будут
+  // ссылаться на один и тот же массив
+  return arr.slice();
 };
 
 // Функция получения случайного числа из положительного диапазона целых чисел
@@ -171,7 +174,6 @@ const cardTemplate = document.querySelector('#card').content.querySelector('.map
 // Функция отображения карточки, если данных для заполнения блока не хватает, то блок скрывается
 const renderCard = function (realEstateCard) {
   const cardElement = cardTemplate.cloneNode(true);
-
   if (realEstateCard['offer']['title']) {
     cardElement.querySelector('.popup__title').textContent = realEstateCard['offer']['title'];
   } else {
@@ -247,6 +249,13 @@ const renderCard = function (realEstateCard) {
     cardElement.querySelector('.popup__avatar').classList.add('visually-hidden');
   }
 
+  // Находим кнопку-крестик в окне отображения карточки
+  const closePopup = cardElement.querySelector('.popup__close');
+  // Вешаем обработчик, в котором по клику скрываем блок карточки
+  closePopup.addEventListener('click', function () {
+    cardElement.classList.add('hidden');
+  });
+
   return cardElement;
 };
 
@@ -282,22 +291,9 @@ for (let i = 0; i < formFilters.children.length; i++) {
 const mapAdverts = document.querySelector('.map');
 const mapPin = document.querySelector('.map__pin--main');
 
-// Функция обработчик - срабатывает, когда пользователь отпускает кнопку мыши с главной метки.
-const buttonMouseUpHandlerCreatePins = function () {
-  // Создание объектов JS на основе созданных данных
-  realEstates = createRealEstates(COUNT_REAL_ESTATE);
-  // Находим блок, где будем отображать метки и отображаем их
-  const blockPins = document.querySelector('.map__pins');
-  blockPins.appendChild(renderPins(realEstates));
-  // Удаляем обработчик
-  mapPin.removeEventListener('mouseup', buttonMouseUpHandlerCreatePins);
-};
-
-/*
- Функция обработчик - срабатывает, когда пользователь (нажимает)отпускает кнопку мыши:
- происходит активация карты, блока фильтров и формы объявлений.
-*/
-const buttonMouseUpHandler = function () {
+// Функция активации: рисуются метки, активируется карта
+// блок фильтров, форма.
+const activationPage = function () {
   mapAdverts.classList.remove('map--faded');
   formAd.classList.remove('ad-form--disabled');
   formFilters.classList.remove('ad-form--disabled');
@@ -307,6 +303,7 @@ const buttonMouseUpHandler = function () {
   for (let i = 0; i < formFilters.children.length; i++) {
     formFilters.children[i].removeAttribute('disabled');
   }
+
   // Задание 2. Узнать координаты метки.
   // Узнать координаты первой метки
   // Вычислить координаты ее центра
@@ -314,11 +311,37 @@ const buttonMouseUpHandler = function () {
   const topMapPin = mapPin.offsetTop + HALF_HEIGHT_MAIN_PIN;
   // Записать данные координат в форму объявления
   formAd.querySelector('#address').setAttribute('value', leftMapPin + ', ' + topMapPin);
+
+  // Создание объектов JS на основе созданных данных
+  realEstates = createRealEstates(COUNT_REAL_ESTATE);
+  // Находим блок, где будем отображать метки и отображаем их
+  const blockPins = document.querySelector('.map__pins');
+  blockPins.appendChild(renderPins(realEstates));
+};
+
+// Обработчики событий: активируют страницу кексобукинга
+// по нажатию левой кнопки мыши или клавиши Enter(когда метка в фокусе)
+const buttonMouseDownHandler = function (evt) {
+  if (evt.button === 0) {
+    activationPage();
+    // Удаляем обработчики
+    mapPin.removeEventListener('mousedown', buttonMouseDownHandler);
+    mapPin.removeEventListener('keydown', buttonKeyDownHandler);
+  }
+};
+
+const buttonKeyDownHandler = function (evt) {
+  if (evt.key === 'Enter') {
+    activationPage();
+    // Удаляем обработчики
+    mapPin.removeEventListener('mousedown', buttonMouseDownHandler);
+    mapPin.removeEventListener('keydown', buttonKeyDownHandler);
+  }
 };
 
 // Вешаем 2 обработчика событий на главную метку
-mapPin.addEventListener('mouseup', buttonMouseUpHandlerCreatePins);
-mapPin.addEventListener('mouseup', buttonMouseUpHandler);
+mapPin.addEventListener('keydown', buttonKeyDownHandler);
+mapPin.addEventListener('mousedown', buttonMouseDownHandler);
 
 // Обработчик события клика мыши на метке для отображения карточки объявления
 mapAdverts.addEventListener('click', function (evt) {
@@ -330,7 +353,7 @@ mapAdverts.addEventListener('click', function (evt) {
   }
   // Если метка содержит класс 'map__pin' и не содержит класс 'map__pin--main', то есть не является главной
   if ((target.classList.contains('map__pin')) && (!target.classList.contains('map__pin--main'))) {
-    // Если есть карточка с характеристиками обьявления, то удаляем ее из разметки
+    // Если уже есть карточка с характеристиками обьявления, то удаляем ее из разметки
     if (mapAdverts.querySelector('.map__card')) {
       mapAdverts.removeChild(mapAdverts.querySelector('.map__card'));
     }

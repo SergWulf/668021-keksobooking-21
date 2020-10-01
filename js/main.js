@@ -15,6 +15,9 @@ const MIN_COORDINATE_X = 0 + COORDINATE_PIN_X;
 const MAX_COORDINATE_X = document.querySelector('.map').clientWidth - COORDINATE_PIN_X;
 const HALF_WIDTH_MAIN_PIN = 31;
 const HALF_HEIGHT_MAIN_PIN = 31;
+const MAX_ROOMS = 100;
+const MAX_GUESTS = 0;
+const MESSAGE_ERROR_VALIDATION = 'Количество гостей не соответствует количеству комнат: 1 комната - 1 гость, 2 комнаты - 1 или 2 гостя, 3 комнаты - 1, 2 или 3 гостя, 100 комнат - не для гостей';
 
 
 const TITLES_RESIDENCE = [
@@ -50,6 +53,13 @@ const TYPE_RESIDENCE = {
   'house': 'Дом',
   'bungalow': 'Бунгало',
   'flat': 'Квартира'
+};
+
+const TYPE_RESIDENCE_PRICE = {
+  'palace': 10000,
+  'house': 5000,
+  'bungalow': 0,
+  'flat': 1000
 };
 
 let realEstates = [];
@@ -291,6 +301,12 @@ for (let i = 0; i < formFilters.children.length; i++) {
 const mapAdverts = document.querySelector('.map');
 const mapPin = document.querySelector('.map__pin--main');
 
+// Узнаем координаты главной метки еще до активации страницы и записываем его в поле формы адреса
+const LEFT_MAP_PIN = mapPin.offsetLeft + HALF_WIDTH_MAIN_PIN;
+const TOP_MAP_PIN = mapPin.offsetTop + HALF_HEIGHT_MAIN_PIN;
+// Записать данные координат в форму объявления
+formAd.querySelector('#address').setAttribute('value', LEFT_MAP_PIN + ', ' + TOP_MAP_PIN);
+
 // Функция активации: рисуются метки, активируется карта
 // блок фильтров, форма.
 const activationPage = function () {
@@ -304,13 +320,8 @@ const activationPage = function () {
     formFilters.children[i].removeAttribute('disabled');
   }
 
-  // Задание 2. Узнать координаты метки.
-  // Узнать координаты первой метки
-  // Вычислить координаты ее центра
-  const leftMapPin = mapPin.offsetLeft + HALF_WIDTH_MAIN_PIN;
-  const topMapPin = mapPin.offsetTop + HALF_HEIGHT_MAIN_PIN;
   // Записать данные координат в форму объявления
-  formAd.querySelector('#address').setAttribute('value', leftMapPin + ', ' + topMapPin);
+  formAd.querySelector('#address').setAttribute('value', LEFT_MAP_PIN + ', ' + TOP_MAP_PIN);
 
   // Создание объектов JS на основе созданных данных
   realEstates = createRealEstates(COUNT_REAL_ESTATE);
@@ -361,3 +372,122 @@ mapAdverts.addEventListener('click', function (evt) {
     mapAdverts.insertBefore(renderCard(realEstates[target.dataset.index]), mapAdverts.children[1]);
   }
 });
+
+// Элементы формы DOM
+const adForm = document.querySelector('.ad-form');
+const titleForm = document.querySelector('#title');
+const priceForm = document.querySelector('#price');
+const addressForm = document.querySelector('#address');
+const typeOfHouseForm = document.querySelector('#type');
+const timeInForm = document.querySelector('#timein');
+const timeOutForm = document.querySelector('#timeout');
+
+
+// Функция ограничений для полей ввода формы объявлений, до валидации формы
+
+const createAttributesForm = function () {
+
+  // 0. Найти форму в DOM, установить ей атрибут action = "https://javascript.pages.academy/keksobooking"
+
+  adForm.setAttribute('active', 'https://javascript.pages.academy/keksobooking');
+  // 1. Найти заголовок объявления в разметке, установить для него атрибуты: обязательное текстовое, минимальное длина 30 сим, максимальная 100 символов.
+
+  titleForm.setAttribute('required', 'required');
+  titleForm.setAttribute('minlength', '30');
+  titleForm.setAttribute('maxlength', '100');
+  // 2. Цена за ночь. Обязательное числовое поле. Максимальное значение 1 000 000.
+
+  priceForm.setAttribute('required', 'required');
+  priceForm.setAttribute('max', '1000000');
+
+  // 3. Адрес, обязательное поле, недоступно для редактирования
+  addressForm.setAttribute('readonly', 'readonly');
+};
+
+createAttributesForm();
+
+// 3. Тип жилья. В зависимости от типа, меняется минимальная цена и отображается в виде плейсхолдера.
+// Валидация соответствия: вид жительста - минимальная цена
+//     «Бунгало» — минимальная цена за ночь 0;
+//     «Квартира» — минимальная цена за ночь 1 000;
+//     «Дом» — минимальная цена 5 000;
+//     «Дворец» — минимальная цена 10 000;
+// Вместе с минимальным значением цены нужно изменять и плейсхолдер.
+
+// Обработка первоначального значения формы
+priceForm.setAttribute('min', TYPE_RESIDENCE_PRICE[typeOfHouseForm.options[typeOfHouseForm.selectedIndex].value]);
+priceForm.setAttribute('placeholder', TYPE_RESIDENCE_PRICE[typeOfHouseForm.options[typeOfHouseForm.selectedIndex].value]);
+
+
+// Вешаем обработчик на изменение типа жилья
+typeOfHouseForm.addEventListener('change', function (evt) {
+  priceForm.setAttribute('min', TYPE_RESIDENCE_PRICE[typeOfHouseForm.options[evt.currentTarget.selectedIndex].value]);
+  priceForm.setAttribute('placeholder', TYPE_RESIDENCE_PRICE[typeOfHouseForm.options[evt.currentTarget.selectedIndex].value]);
+});
+
+// Валидация полей заезды и выезда
+// Поля «Время заезда» и «Время выезда» синхронизированы:
+// при изменении значения одного поля, во втором выделяется соответствующее ему.
+// Например, если время заезда указано «после 14», то время выезда будет равно «до 14» и наоборот.
+//
+// 1. Обработка события на каждом поле
+// 2. Если одно поле принимает определенное значение, то и другое поле, послы выбора значения, принимает тоже значение
+
+const validationTime = function (evt) {
+  if (evt.currentTarget.name === 'timeout') {
+    timeInForm.options.selectedIndex = timeOutForm.options.selectedIndex;
+  } else {
+    timeOutForm.options.selectedIndex = timeInForm.options.selectedIndex;
+  }
+};
+
+timeInForm.addEventListener('change', validationTime);
+timeOutForm.addEventListener('change', validationTime);
+
+// Функция - обработчик события формы (отменяет действие по умолчанию, вызывает функцию валидации,
+// если поля не соотвествуют ограничениям, то подсвечивать их красным цветом, если все поля правильно
+// заполнены, то происходит отправка данных на сервер
+// Затем главная страница возвращается в исходное состояние(неактивное, когда карта заблокирована, блоки фильтров и форма подачи объявления).
+
+// Функция валидации формы (вызывается событием отправки формы).
+// const validationForm = function() {
+// 4. Адрес. Ручное редактирование запрещено. Выставляется автоматически, при перемещении метки.
+// 5. Поля время заезда и выезда. Они синхронизированны. Если указано время заезда после 14, то время выезда до 14, и наоборот.
+// 6. Поле "количество комнат". Синхронизировано с полем "количество мест"
+// 7. Значения полей "ваша фотография" и "фотография жилья" может быть только изобажение.
+//
+// }
+
+const roomNumberForm = document.querySelector('#room_number');
+const capacityForm = document.querySelector('#capacity');
+
+const validationGuestsInRoom = function (evt) {
+  // Сразу записываем сообщения об несоответствии комнат и гостей, в дальнейшем эти значения примут истинные значения
+  roomNumberForm.setCustomValidity(MESSAGE_ERROR_VALIDATION);
+  capacityForm.setCustomValidity(MESSAGE_ERROR_VALIDATION);
+
+  // Узнаем, есть ли максимальные значения в данный момент в полях: комнаты - гости
+  const expressionMaxRooms = (Number(roomNumberForm.options[roomNumberForm.selectedIndex].value) === MAX_ROOMS);
+  const expressionMaxGuests = (Number(capacityForm.options[capacityForm.selectedIndex].value) === MAX_GUESTS);
+  // Записываем значения условия (здесь условие, проверяющие, что нету не стандартных значений в комнатах и кол-ве гостей
+  const expressionWithoutMaxValue = ((!expressionMaxRooms) && (!expressionMaxGuests));
+  // Здесь условие, что выбраны именно не стандартные значения комнат и гостей: 100 и 0;
+  const expressionWithMaxValue = (expressionMaxGuests && expressionMaxRooms);
+  // Переменная, которая хранит условие проверки соответсвия гостей - комнатам, либо комнат - гостям.
+  let currentExpressionCondition = (roomNumberForm.options[roomNumberForm.selectedIndex].value >= capacityForm.options[capacityForm.selectedIndex].value);
+  // Если меняется значение гостей, то меняетс условие соответствия гостей комнат
+  if ((Boolean(evt)) && (evt.currentTarget.name === 'capacity')) {
+    currentExpressionCondition = (capacityForm.options[capacityForm.selectedIndex].value <= roomNumberForm.options[roomNumberForm.selectedIndex].value);
+  }
+  // Основная проверка соответствия комнат гостям,
+  // Если комнаты соответствуют гостям и поля не содержать максимальных значений,
+  // или есть максимальные значения, но они в обоих полях, то всё валидно, иначе выводим сообщение!
+  if ((expressionWithoutMaxValue && currentExpressionCondition) || (expressionWithMaxValue)) {
+    roomNumberForm.setCustomValidity('');
+    capacityForm.setCustomValidity('');
+  }
+};
+
+validationGuestsInRoom(false);
+roomNumberForm.addEventListener('change', validationGuestsInRoom);
+capacityForm.addEventListener('change', validationGuestsInRoom);

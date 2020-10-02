@@ -373,6 +373,14 @@ mapAdverts.addEventListener('click', function (evt) {
   }
 });
 
+// Вешаем обработчик, который перехватывает нажатие клавиши ESC на всей карте.
+mapAdverts.addEventListener('keydown', function (evt) {
+  if ((mapAdverts.querySelector('.map__card')) && (evt.key === 'Escape')) {
+    mapAdverts.querySelector('.map__card').classList.add('hidden');
+  }
+});
+
+
 // Элементы формы DOM
 const adForm = document.querySelector('.ad-form');
 const titleForm = document.querySelector('#title');
@@ -381,6 +389,8 @@ const addressForm = document.querySelector('#address');
 const typeOfHouseForm = document.querySelector('#type');
 const timeInForm = document.querySelector('#timein');
 const timeOutForm = document.querySelector('#timeout');
+const avatarForm = document.querySelector('#avatar');
+const imagesForm = document.querySelector('#images');
 
 
 // Функция ограничений для полей ввода формы объявлений, до валидации формы
@@ -389,7 +399,7 @@ const createAttributesForm = function () {
 
   // 0. Найти форму в DOM, установить ей атрибут action = "https://javascript.pages.academy/keksobooking"
 
-  adForm.setAttribute('active', 'https://javascript.pages.academy/keksobooking');
+  adForm.setAttribute('action', 'https://javascript.pages.academy/keksobooking');
   // 1. Найти заголовок объявления в разметке, установить для него атрибуты: обязательное текстовое, минимальное длина 30 сим, максимальная 100 символов.
 
   titleForm.setAttribute('required', 'required');
@@ -402,6 +412,10 @@ const createAttributesForm = function () {
 
   // 3. Адрес, обязательное поле, недоступно для редактирования
   addressForm.setAttribute('readonly', 'readonly');
+
+  // 4. Ограничение на тип загружаемых файлов, они могут быть только изображениями
+  avatarForm.setAttribute('accept', 'image/*');
+  imagesForm.setAttribute('accept', 'image/*');
 };
 
 createAttributesForm();
@@ -491,3 +505,11 @@ const validationGuestsInRoom = function (evt) {
 validationGuestsInRoom(false);
 roomNumberForm.addEventListener('change', validationGuestsInRoom);
 capacityForm.addEventListener('change', validationGuestsInRoom);
+
+/*
+adForm.addEventListener('submit', function (evt) {
+  evt.preventDefault();
+  console.log(adForm.getAttribute('action'));
+ // adForm.submit();
+});
+*/

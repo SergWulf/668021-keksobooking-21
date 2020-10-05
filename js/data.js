@@ -1,5 +1,7 @@
 'use strict';
 
+// Модуль с данными
+
 (function () {
 
   const COUNT_REAL_ESTATE = 8;
@@ -17,9 +19,6 @@
   const MAX_COORDINATE_X = document.querySelector('.map').clientWidth - COORDINATE_PIN_X;
   const HALF_WIDTH_MAIN_PIN = 31;
   const HALF_HEIGHT_MAIN_PIN = 31;
-  const MAX_ROOMS = 100;
-  const MAX_GUESTS = 0;
-  const MESSAGE_ERROR_VALIDATION = 'Количество гостей не соответствует количеству комнат: 1 комната - 1 гость, 2 комнаты - 1 или 2 гостя, 3 комнаты - 1, 2 или 3 гостя, 100 комнат - не для гостей';
 
 
   const TITLES_RESIDENCE = [
@@ -76,23 +75,23 @@
       arr[j] = arr[i];
       arr[i] = temp;
     }
-    // Возвращаем именн копию массива, а не ссылку,
+    // Возвращаем именно копию массива, а не ссылку,
     // в противном случае все объекты будут
     // ссылаться на один и тот же массив
     return arr.slice();
   };
 
-// Функция получения случайного числа из положительного диапазона целых чисел
+  // Функция получения случайного числа из положительного диапазона целых чисел
   const getRandomNumberRange = function (firstNumber, lastNumber) {
     return Math.round(Math.random() * (lastNumber - firstNumber) + firstNumber);
   };
 
-// Функция получения случайного элемента из массива
+  // Функция получения случайного элемента из массива
   const getRandomElementOfArray = function (listElements) {
     return Math.floor(Math.random() * listElements.length);
   };
 
-// Функция, которая ищет в названии тип недвижимости и возвращает его в удобочитаемом виде
+  // Функция, которая ищет в названии тип недвижимости и возвращает его в удобочитаемом виде
   const getTypeResidence = function (titleTypeResidence) {
     for (let key in TYPE_RESIDENCE) {
       if ((titleTypeResidence.toLowerCase().indexOf(TYPE_RESIDENCE[key].toLowerCase())) !== -1) {
@@ -137,6 +136,19 @@
       listRealEstate.push(realEstate);
     }
     return listRealEstate;
+  };
+
+  // Экспорт переменных и методов модуля data
+  window.data = {
+    COUNT_REAL_ESTATE: COUNT_REAL_ESTATE,
+    COORDINATE_PIN_X: COORDINATE_PIN_X,
+    COORDINATE_PIN_Y: COORDINATE_PIN_Y,
+    HALF_WIDTH_MAIN_PIN: HALF_WIDTH_MAIN_PIN,
+    HALF_HEIGHT_MAIN_PIN: HALF_HEIGHT_MAIN_PIN,
+    TYPE_RESIDENCE: TYPE_RESIDENCE,
+    TYPE_RESIDENCE_PRICE: TYPE_RESIDENCE_PRICE,
+    realEstates: realEstates,
+    createRealEstates: createRealEstates
   };
 
 })();

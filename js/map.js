@@ -21,7 +21,7 @@
   const mapAdverts = document.querySelector('.map');
   const mapPin = document.querySelector('.map__pin--main');
 
-  // Узнаем координаты главной метки еще до активации страницы и записываем его в поле формы адреса
+  // Узнаем координаты  центра главной метки еще до активации страницы и записываем его в поле формы адреса
   const LEFT_MAP_PIN = mapPin.offsetLeft + window.data.HALF_WIDTH_MAIN_PIN;
   const TOP_MAP_PIN = mapPin.offsetTop + window.data.HALF_HEIGHT_MAIN_PIN;
   // Записать данные координат в форму объявления

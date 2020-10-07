@@ -16,9 +16,9 @@
   const HALF_WIDTH_MAIN_PIN = 31;
   const HALF_HEIGHT_MAIN_PIN = 31;
 
-  // Начальные координаты главной метки.
-  const BEGIN_PIN_MAIN_COORDINATE_X = 570;
-  const BEGIN_PIN_MAIN_COORDINATE_Y = 370;
+  // Начальные координаты центра главной метки.
+  const LEFT_MAP_PIN = document.querySelector('.map__pin--main').offsetLeft + HALF_WIDTH_MAIN_PIN;
+  const TOP_MAP_PIN = document.querySelector('.map__pin--main').offsetTop + HALF_HEIGHT_MAIN_PIN;
 
   // Координаты указателя метки мелких меток
   const COORDINATE_PIN_X = 25;
@@ -161,8 +161,12 @@
     COUNT_REAL_ESTATE: COUNT_REAL_ESTATE,
     COORDINATE_PIN_X: COORDINATE_PIN_X,
     COORDINATE_PIN_Y: COORDINATE_PIN_Y,
+    LEFT_MAP_PIN: LEFT_MAP_PIN,
+    TOP_MAP_PIN: TOP_MAP_PIN,
     HEIGHT_PIN_MAIN: HEIGHT_PIN_MAIN,
     WIDTH_PIN_MAIN: WIDTH_PIN_MAIN,
+    MIN_MAP_Y: MIN_MAP_Y,
+    MAX_MAP_Y: MAX_MAP_Y,
     HALF_WIDTH_MAIN_PIN: HALF_WIDTH_MAIN_PIN,
     HALF_HEIGHT_MAIN_PIN: HALF_HEIGHT_MAIN_PIN,
     TYPE_RESIDENCE: TYPE_RESIDENCE,

@@ -4,7 +4,7 @@
 
 (function () {
   // Создаем список скриптов в правильной зависимости
-  const scripts = ['data.js', 'pin.js', 'card.js', 'form.js', 'map.js', 'moving.js'];
+  const scripts = ['load.js', 'data.js', 'pin.js', 'card.js', 'form.js', 'map.js', 'moving.js'];
 
   // Создаем fragment для списков
   const fragmentScripts = document.createDocumentFragment();

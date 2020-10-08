@@ -49,7 +49,9 @@
     }
 
     // Создание объектов JS на основе созданных данных
-    window.data.realEstates = window.data.createRealEstates(window.data.COUNT_REAL_ESTATE);
+    // window.data.realEstates = window.data.createRealEstates(window.data.COUNT_REAL_ESTATE);
+    // console.log(window.data.realEstates);
+    window.data.realEstates = window.load.newRealEstates;
     // Находим блок, где будем отображать метки и отображаем их
     const blockPins = document.querySelector('.map__pins');
     blockPins.appendChild(window.pin.renderPins(window.data.realEstates));

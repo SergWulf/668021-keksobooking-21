@@ -11,7 +11,7 @@
     const pinElement = pinTemplate.cloneNode(true);
     const pinPointerCoordinateX = Number(realEstatePin['location']['x']) - window.data.COORDINATE_PIN_X;
     const pinPointerCoordinateY = Number(realEstatePin['location']['y']) - window.data.COORDINATE_PIN_Y;
-    pinElement.style = 'left: ' + pinPointerCoordinateX + 'px; top: ' + pinPointerCoordinateY + 'px;';
+    pinElement.style = `left: ${pinPointerCoordinateX}px; top: ${pinPointerCoordinateY}px;`;
     pinElement.querySelector('img').src = realEstatePin['author']['avatar'];
     pinElement.querySelector('img').alt = realEstatePin['offer']['title'];
     return pinElement;

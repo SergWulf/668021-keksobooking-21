@@ -16,7 +16,7 @@
       topMapPin = pin.offsetTop + window.data.HEIGHT_PIN_MAIN;
     }
     // Записать данные координат в форму объявления
-    return String(leftMapPin + ', ' + topMapPin);
+    return `${leftMapPin}, ${topMapPin}`;
   };
 
   //  Функция обработка события drag-and-drop
@@ -54,10 +54,10 @@
       const minCoordinateY = window.data.MIN_MAP_Y - window.data.HEIGHT_PIN_MAIN;
       const maxCoordinateY = window.data.MAX_MAP_Y - window.data.HEIGHT_PIN_MAIN;
       if ((newOffsetLeft >= minCoordinateX) && (newOffsetLeft <= maxCoordinateX)) {
-        window.map.mapPin.style.left = (window.map.mapPin.offsetLeft - shift.x) + 'px';
+        window.map.mapPin.style.left = `${window.map.mapPin.offsetLeft - shift.x}px`;
       }
       if (((newOffsetTop >= minCoordinateY)) && (newOffsetTop <= maxCoordinateY)) {
-        window.map.mapPin.style.top = (window.map.mapPin.offsetTop - shift.y) + 'px';
+        window.map.mapPin.style.top = `${window.map.mapPin.offsetTop - shift.y}px`;
       }
       // Запись координат в форму объявления
       window.form.adForm.querySelector('#address').setAttribute('value', showCoordinatesMapPin(window.map.mapPin, dragged));

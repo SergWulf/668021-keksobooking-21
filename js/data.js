@@ -121,9 +121,9 @@
 
   const getPathImageAvatar = function (numberImage) {
     if ((numberImage < 10) && (numberImage > 0)) {
-      numberImage = '0' + numberImage;
+      numberImage = `0${numberImage}`;
     }
-    return 'img/avatars/user' + numberImage + '.png';
+    return `img/avatars/user${numberImage}.png`;
   };
 
   const createRealEstates = function (count) {
@@ -150,7 +150,7 @@
           'y': getRandomNumberRange(MIN_COORDINATE_Y, MAX_COORDINATE_Y)
         },
       };
-      realEstate['offer']['address'] = realEstate['location']['x'] + ', ' + realEstate['location']['y'];
+      realEstate['offer']['address'] = `${realEstate['location']['x']}, ${realEstate['location']['y']}`;
       listRealEstate.push(realEstate);
     }
     return listRealEstate;

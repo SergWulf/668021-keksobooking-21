@@ -20,7 +20,7 @@
       cardElement.querySelector('.popup__text--address').classList.add('visually-hidden');
     }
     if (realEstateCard['offer']['price']) {
-      cardElement.querySelector('.popup__text--price').innerHTML = realEstateCard['offer']['price'] + '&#x20bd;' + '<span>/ночь</span>';
+      cardElement.querySelector('.popup__text--price').innerHTML = `${realEstateCard['offer']['price']}&#x20bd;<span>/ночь</span>`;
     } else {
       cardElement.querySelector('.popup__text--price').classList.add('visually-hidden');
     }
@@ -30,12 +30,12 @@
       cardElement.querySelector('.popup__type').classList.add('visually-hidden');
     }
     if (realEstateCard['offer']['rooms']) {
-      cardElement.querySelector('.popup__text--capacity').textContent = realEstateCard['offer']['rooms'] + ' комнаты для ' + realEstateCard['offer']['guests'] + ' гостей';
+      cardElement.querySelector('.popup__text--capacity').textContent = `${realEstateCard['offer']['rooms']} комнаты для ${realEstateCard['offer']['guests']} гостей`;
     } else {
       cardElement.querySelector('.popup__text--capacity').classList.add('visually-hidden');
     }
     if ((realEstateCard['offer']['checkin']) && (realEstateCard['offer']['checkout'])) {
-      cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + realEstateCard['offer']['checkin'] + ', выездо до ' + realEstateCard['offer']['checkout'];
+      cardElement.querySelector('.popup__text--time').textContent = `Заезд после ${realEstateCard['offer']['checkin']}, выездо до ${realEstateCard['offer']['checkout']}`;
     } else {
       cardElement.querySelector('.popup__text--time').classList.add('visually-hidden');
     }
@@ -50,7 +50,7 @@
       // Добавляем нужные услуги в разметку
       for (let i = 0; i < realEstateCard['offer']['features'].length; i++) {
         const elementFeature = document.createElement('li');
-        elementFeature.className = 'popup__feature popup__feature--' + realEstateCard['offer']['features'][i];
+        elementFeature.className = `popup__feature popup__feature--${realEstateCard['offer']['features'][i]}`;
         popupFeatures.appendChild(elementFeature);
       }
     } else {

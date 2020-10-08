@@ -29,8 +29,8 @@
     // Записать начальные данные координат в форму объявления
     window.form.adForm.querySelector('#address').setAttribute('value', window.data.LEFT_MAP_PIN + ', ' + window.data.TOP_MAP_PIN);
     // Поставить метку в центр карты
-    mapPin.style.left = Number(window.data.LEFT_MAP_PIN - window.data.HALF_WIDTH_MAIN_PIN) + "px";
-    mapPin.style.top = Number(window.data.TOP_MAP_PIN - window.data.HALF_HEIGHT_MAIN_PIN) + "px";
+    mapPin.style.left = `${window.data.LEFT_MAP_PIN - window.data.HALF_WIDTH_MAIN_PIN}px`;
+    mapPin.style.top = `${window.data.TOP_MAP_PIN - window.data.HALF_HEIGHT_MAIN_PIN}px`;
   };
 
   deactivationPage();

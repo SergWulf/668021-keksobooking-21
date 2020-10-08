@@ -11,15 +11,33 @@
   const MAX_COUNT_ROOMS = 5;
   const MIN_COUNT_GUESTS = 2;
   const MAX_COUNT_GUESTS = 11;
-  const COORDINATE_PIN_X = 31;
-  const COORDINATE_PIN_Y = 84;
-  const MIN_COORDINATE_Y = 130 + COORDINATE_PIN_Y;
-  const MAX_COORDINATE_Y = 630 - COORDINATE_PIN_Y;
-  const MIN_COORDINATE_X = 0 + COORDINATE_PIN_X;
-  const MAX_COORDINATE_X = document.querySelector('.map').clientWidth - COORDINATE_PIN_X;
+
+  // Размеры метки, с помощью которые можно вычислить центр метки
   const HALF_WIDTH_MAIN_PIN = 31;
   const HALF_HEIGHT_MAIN_PIN = 31;
 
+  // Начальные координаты центра главной метки.
+  const LEFT_MAP_PIN = document.querySelector('.map__pin--main').offsetLeft + HALF_WIDTH_MAIN_PIN;
+  const TOP_MAP_PIN = document.querySelector('.map__pin--main').offsetTop + HALF_HEIGHT_MAIN_PIN;
+
+  // Координаты указателя метки мелких меток
+  const COORDINATE_PIN_X = 25;
+  const COORDINATE_PIN_Y = 70;
+
+  const MIN_MAP_Y = 130;
+  const MAX_MAP_Y = 630;
+
+  // Высота и ширина главной метки
+  const HEIGHT_PIN_MAIN = 82;
+  const WIDTH_PIN_MAIN = 62;
+
+  // Минимальные и максимальные значения координаты Y
+  const MIN_COORDINATE_Y = MIN_MAP_Y + COORDINATE_PIN_Y;
+  const MAX_COORDINATE_Y = MAX_MAP_Y - COORDINATE_PIN_Y;
+
+  // Минимальные и максимальные значения координаты X
+  const MIN_COORDINATE_X = 0 + COORDINATE_PIN_X;
+  const MAX_COORDINATE_X = document.querySelector('.map').clientWidth - COORDINATE_PIN_X;
 
   const TITLES_RESIDENCE = [
     'Большая уютная квартира',
@@ -103,9 +121,9 @@
 
   const getPathImageAvatar = function (numberImage) {
     if ((numberImage < 10) && (numberImage > 0)) {
-      numberImage = '0' + numberImage;
+      numberImage = `0${numberImage}`;
     }
-    return 'img/avatars/user' + numberImage + '.png';
+    return `img/avatars/user${numberImage}.png`;
   };
 
   const createRealEstates = function (count) {
@@ -132,7 +150,7 @@
           'y': getRandomNumberRange(MIN_COORDINATE_Y, MAX_COORDINATE_Y)
         },
       };
-      realEstate['offer']['address'] = realEstate['location']['x'] + ', ' + realEstate['location']['y'];
+      realEstate['offer']['address'] = `${realEstate['location']['x']}, ${realEstate['location']['y']}`;
       listRealEstate.push(realEstate);
     }
     return listRealEstate;
@@ -143,6 +161,12 @@
     COUNT_REAL_ESTATE: COUNT_REAL_ESTATE,
     COORDINATE_PIN_X: COORDINATE_PIN_X,
     COORDINATE_PIN_Y: COORDINATE_PIN_Y,
+    LEFT_MAP_PIN: LEFT_MAP_PIN,
+    TOP_MAP_PIN: TOP_MAP_PIN,
+    HEIGHT_PIN_MAIN: HEIGHT_PIN_MAIN,
+    WIDTH_PIN_MAIN: WIDTH_PIN_MAIN,
+    MIN_MAP_Y: MIN_MAP_Y,
+    MAX_MAP_Y: MAX_MAP_Y,
     HALF_WIDTH_MAIN_PIN: HALF_WIDTH_MAIN_PIN,
     HALF_HEIGHT_MAIN_PIN: HALF_HEIGHT_MAIN_PIN,
     TYPE_RESIDENCE: TYPE_RESIDENCE,

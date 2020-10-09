@@ -38,6 +38,7 @@
   // Функция активации: рисуются метки, активируется карта
   // блок фильтров, форма.
   const activationPage = function () {
+
     mapAdverts.classList.remove('map--faded');
     window.form.adForm.classList.remove('ad-form--disabled');
     formFilters.classList.remove('ad-form--disabled');
@@ -51,9 +52,10 @@
     // Создание объектов JS на основе созданных данных
     // window.data.realEstates = window.data.createRealEstates(window.data.COUNT_REAL_ESTATE);
     // console.log(window.data.realEstates);
-    window.data.realEstates = window.load.newRealEstates;
+
     // Находим блок, где будем отображать метки и отображаем их
     const blockPins = document.querySelector('.map__pins');
+
     blockPins.appendChild(window.pin.renderPins(window.data.realEstates));
   };
 

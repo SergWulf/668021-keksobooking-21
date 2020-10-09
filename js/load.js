@@ -9,20 +9,19 @@
 
   const URL = 'https://21.javascript.pages.academy/keksobooking/data';
 
-  let newRealEstates = [];
-
-  const getData = function (data) {
-    console.log(data);
+  const getData = function (dataJSON) {
+    window.data.realEstates = dataJSON;
   };
 
   const outError = function (message) {
-    console.log(message);
+    window.data.errorsJSON = message;
   };
 
-  const load = function (onSuccess, onError) {
+  const downloadData = function (onSuccess, onError) {
     const xhr = new XMLHttpRequest();
-    xhr.responseType = 'json';
     xhr.open('GET', URL);
+    xhr.responseType = 'json';
+
 
     xhr.addEventListener('load', function () {
       let error = '';
@@ -50,11 +49,5 @@
     xhr.send();
   };
 
-  load(getData, outError);
-  console.log(newRealEstates);
-
-  window.load = {
-    newRealEstates: newRealEstates
-  };
-
+  downloadData(getData, outError);
 })();

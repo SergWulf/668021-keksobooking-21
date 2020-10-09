@@ -82,6 +82,7 @@
   };
 
   let realEstates = [];
+  let errorsJSON = '';
 
   // Функция перемешивания массива, благополучно взятая из харбра, по совету, чтобы не изобретать велосипед :)
   const shuffle = function (arr) {
@@ -172,6 +173,7 @@
     TYPE_RESIDENCE: TYPE_RESIDENCE,
     TYPE_RESIDENCE_PRICE: TYPE_RESIDENCE_PRICE,
     realEstates: realEstates,
+    errorsJSON: errorsJSON,
     createRealEstates: createRealEstates
   };
 

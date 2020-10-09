@@ -9,14 +9,6 @@
 
   const URL = 'https://21.javascript.pages.academy/keksobooking/data';
 
-  const getData = function (dataJSON) {
-    window.data.realEstates = dataJSON;
-  };
-
-  const outError = function (message) {
-    window.data.errorsJSON = message;
-  };
-
   const downloadData = function (onSuccess, onError) {
     const xhr = new XMLHttpRequest();
     xhr.open('GET', URL);
@@ -49,5 +41,7 @@
     xhr.send();
   };
 
-  downloadData(getData, outError);
+  window.load = {
+    downloadData: downloadData
+  };
 })();

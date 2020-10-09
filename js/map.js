@@ -35,10 +35,25 @@
 
   deactivationPage();
 
+  const renderPinsJSON = function () {
+    // Находим блок, где будем отображать метки и отображаем их
+    const blockPins = document.querySelector('.map__pins');
+    blockPins.appendChild(window.pin.renderPins(window.data.realEstates));
+  };
+
+  const outError = function (message) {
+    window.data.errorsJSON = message;
+  };
+
+  const getData = function (dataJSON) {
+    window.data.realEstates = dataJSON;
+    // Вызываем функцию отрисовки меток по JSON данным
+    renderPinsJSON();
+  };
+
   // Функция активации: рисуются метки, активируется карта
   // блок фильтров, форма.
   const activationPage = function () {
-
     mapAdverts.classList.remove('map--faded');
     window.form.adForm.classList.remove('ad-form--disabled');
     formFilters.classList.remove('ad-form--disabled');
@@ -48,15 +63,8 @@
     for (let i = 0; i < formFilters.children.length; i++) {
       formFilters.children[i].removeAttribute('disabled');
     }
-
-    // Создание объектов JS на основе созданных данных
-    // window.data.realEstates = window.data.createRealEstates(window.data.COUNT_REAL_ESTATE);
-    // console.log(window.data.realEstates);
-
-    // Находим блок, где будем отображать метки и отображаем их
-    const blockPins = document.querySelector('.map__pins');
-
-    blockPins.appendChild(window.pin.renderPins(window.data.realEstates));
+    // Загружаем JSON данные после активации
+    window.load.downloadData(getData, outError);
   };
 
   // Обработчики событий: активируют страницу кексобукинга

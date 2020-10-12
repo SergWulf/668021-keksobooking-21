@@ -121,13 +121,94 @@
   roomNumberForm.addEventListener('change', validationGuestsInRoom);
   capacityForm.addEventListener('change', validationGuestsInRoom);
 
-  /*
+  // Обработчик формы
+  // 1. Перехватить стандартную отправку формы.
+  // 2. Собрать необходимые данные с формы с помощью FormData,
+  // 3. Отправить эти данные посредством xhr на сервер.
+  // 4. Если данные отправлены успешно, то необходимо сбросить форму и вернуть состояние страницы в неактивное.
+  // 4.1 После успешной отправки данных, необходимо отобразить сообщение, которое находится в template, ид #success,
+  //     Сообщение должно закрывать при нажатии кнопки Esc, либо по любому клику, вне формы окна.
+  // 4.2 Если данные отправились не успешно, то отобразить сообщение с ид #error из template, в секции main,
+  //     Сообщение должно исчезать по нажатию на кнопку .error__button, Esc и по любому клику за пределами сообщения.
+
+  // Коллбэк функция успешной отправки данных формы.
+  const successForm = function () {
+    window.map.deactivationPage();
+    // Найти template Success и отобразить его, повесить обработчик на закрытие
+    const templateSuccess = document.querySelector('#success').content.querySelector('.success');
+    const successPopup = templateSuccess.cloneNode(true);
+    document.querySelector('main').appendChild(successPopup);
+    successPopup.setAttribute('tabindex', '0');
+    successPopup.style.border = '2px solid red';
+
+    // Обработчики закрытия окна
+
+    successPopup.addEventListener('click', function () {
+      // Удалить окно из разметки
+      document.querySelector('main').removeChild(document.querySelector('main').lastChild);
+    });
+
+    successPopup.addEventListener('keydown', function (evt) {
+      console.log('Нажата клавиша');
+      /*
+      if (evt.key === 'Escape') {
+        // Удалить окно из разметки
+        document.querySelector('main').removeChild(document.querySelector('main').lastChild);
+      }
+       */
+    });
+
+    document.body.addEventListener('keydown', function (evt) {
+      console.log(evt.key);
+    });
+  };
+
+  // Коллбэк функция, если возникла ошибка в отправке данных
+  const errorForm = function (message) {
+    // Найти template Error и отобразить его, повесить обработчик на закрытие
+    const templateError = document.querySelector('#error').content.querySelector('.error');
+    const errorPopup = templateError.cloneNode(true);
+    errorPopup.querySelector('p').textContent = message;
+    document.querySelector('main').appendChild(errorPopup);
+    errorPopup.setAttribute('tabindex', '0');
+    // Обработчики закрытия окна
+
+    errorPopup.addEventListener('keydown', function (evt) {
+      if (evt.key === 'Escape') {
+        // Удалить окно из разметки
+        document.querySelector('main').removeChild(document.querySelector('main').lastChild);
+      }
+    });
+
+    errorPopup.addEventListener('click', function () {
+      // Удалить окно из разметки
+      document.querySelector('main').removeChild(document.querySelector('main').lastChild);
+    });
+
+    errorPopup.querySelector('.error__button').addEventListener('click', function () {
+      // Удалить окно из разметки
+      document.querySelector('main').removeChild(document.querySelector('main').lastChild);
+    });
+  };
+
   adForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    console.log(adForm.getAttribute('action'));
-   // adForm.submit();
+    // Получаем данные с формы.
+    let dataForm = new FormData(adForm);
+    // Вызываем функцию отправки формы
+    window.upload.uploadData(dataForm, successForm, errorForm);
   });
-  */
+
+
+  // Обработчик кнопки сброса формы,
+  const buttonFormReset = document.querySelector('.ad-form__reset');
+  const buttonResetClickHandler = function (evtReset) {
+    evtReset.preventDefault();
+    // Деактивируем главную страницу и сбрасываем форму
+    window.map.deactivationPage();
+  };
+
+  buttonFormReset.addEventListener('click', buttonResetClickHandler);
 
   // Экспорт данных
   window.form = {

@@ -139,27 +139,20 @@
     const successPopup = templateSuccess.cloneNode(true);
     document.querySelector('main').appendChild(successPopup);
     successPopup.setAttribute('tabindex', '0');
-    successPopup.style.border = '2px solid red';
+    successPopup.focus();
 
     // Обработчики закрытия окна
-
     successPopup.addEventListener('click', function () {
       // Удалить окно из разметки
       document.querySelector('main').removeChild(document.querySelector('main').lastChild);
     });
 
     successPopup.addEventListener('keydown', function (evt) {
-      // console.log('Нажата клавиша');
       if (evt.key === 'Escape') {
         // Удалить окно из разметки
         document.querySelector('main').removeChild(document.querySelector('main').lastChild);
       }
     });
-    /* На боди тоже не работает перехват клавиши, не понял почему
-    document.body.addEventListener('keydown', function (evt) {
-      console.log(evt.key);
-    });
-    */
   };
 
   // Коллбэк функция, если возникла ошибка в отправке данных
@@ -170,6 +163,7 @@
     errorPopup.querySelector('p').textContent = message;
     document.querySelector('main').appendChild(errorPopup);
     errorPopup.setAttribute('tabindex', '0');
+    errorPopup.focus();
     // Обработчики закрытия окна
 
     errorPopup.addEventListener('keydown', function (evt) {

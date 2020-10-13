@@ -149,18 +149,17 @@
     });
 
     successPopup.addEventListener('keydown', function (evt) {
-      console.log('Нажата клавиша');
-      /*
+      // console.log('Нажата клавиша');
       if (evt.key === 'Escape') {
         // Удалить окно из разметки
         document.querySelector('main').removeChild(document.querySelector('main').lastChild);
       }
-       */
     });
-
+    /* На боди тоже не работает перехват клавиши, не понял почему
     document.body.addEventListener('keydown', function (evt) {
       console.log(evt.key);
     });
+    */
   };
 
   // Коллбэк функция, если возникла ошибка в отправке данных

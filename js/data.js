@@ -40,6 +40,9 @@
   let realEstates = [];
   let errorsJSON = '';
 
+  const URL_DOWNLOAD = 'https://21.javascript.pages.academy/keksobooking/data';
+  const URL_UPLOAD = 'https://21.javascript.pages.academy/keksobooking';
+
   // Экспорт переменных и методов модуля data
   window.data = {
     COORDINATE_PIN_X: COORDINATE_PIN_X,
@@ -56,6 +59,8 @@
     TYPE_RESIDENCE_PRICE: TYPE_RESIDENCE_PRICE,
     realEstates: realEstates,
     errorsJSON: errorsJSON,
+    URL_UPLOAD: URL_UPLOAD,
+    URL_DOWNLOAD: URL_DOWNLOAD
   };
 
 })();

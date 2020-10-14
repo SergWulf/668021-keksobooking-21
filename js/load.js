@@ -6,21 +6,14 @@
 
 (function () {
 
-  const URL_DOWNLOAD = 'https://21.javascript.pages.academy/keksobooking/data';
-  const URL_UPLOAD = 'https://21.javascript.pages.academy/keksobooking';
-
-  const loadData = function (data, onSuccess, onError) {
+  const loadData = function (onSuccess, onError, method, URL, data = undefined) {
     const xhr = new XMLHttpRequest();
 
     xhr.addEventListener('load', function () {
       let error = '';
       switch (xhr.status) {
         case 200:
-          if (!data) {
-            onSuccess(xhr.response);
-          } else {
-            onSuccess();
-          }
+          onSuccess(xhr.response);
           break;
         default:
           error = `Статус ответа: ${xhr.status} ${xhr.statusText}`;
@@ -41,13 +34,8 @@
     xhr.responseType = 'json';
     xhr.timeout = 20000; // 20s
 
-    if (!data) {
-      xhr.open('GET', URL_DOWNLOAD);
-      xhr.send();
-    } else {
-      xhr.open('POST', URL_UPLOAD);
-      xhr.send(data);
-    }
+    xhr.open(method, URL);
+    xhr.send(data);
   };
 
   window.load = {

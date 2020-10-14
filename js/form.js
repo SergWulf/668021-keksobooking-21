@@ -189,7 +189,7 @@
     // Получаем данные с формы.
     let dataForm = new FormData(adForm);
     // Вызываем функцию отправки формы
-    window.upload.uploadData(dataForm, successForm, errorForm);
+    window.load.loadData(dataForm, successForm, errorForm);
   });
 
 

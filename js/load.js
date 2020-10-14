@@ -1,25 +1,26 @@
 'use strict';
 
-// Модуль загрузки данных с сервера
+// Модуль загрузки данных с сервера(и наоборот)
 // 1. Сделать запрос на получение JSON данных с сервера
 // 2. Проверить, что запрос выполнился успешно, если нет, то обработать все исключения
-// 3. Передать полученные данные для отрисовки меток на карте.
 
 (function () {
 
-  const URL = 'https://21.javascript.pages.academy/keksobooking/data';
+  const URL_DOWNLOAD = 'https://21.javascript.pages.academy/keksobooking/data';
+  const URL_UPLOAD = 'https://21.javascript.pages.academy/keksobooking';
 
-  const downloadData = function (onSuccess, onError) {
+  const loadData = function (data, onSuccess, onError) {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', URL);
-    xhr.responseType = 'json';
-
 
     xhr.addEventListener('load', function () {
       let error = '';
       switch (xhr.status) {
         case 200:
-          onSuccess(xhr.response);
+          if (!data) {
+            onSuccess(xhr.response);
+          } else {
+            onSuccess();
+          }
           break;
         default:
           error = `Статус ответа: ${xhr.status} ${xhr.statusText}`;
@@ -37,11 +38,19 @@
       onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
+    xhr.responseType = 'json';
     xhr.timeout = 20000; // 20s
-    xhr.send();
+
+    if (!data) {
+      xhr.open('GET', URL_DOWNLOAD);
+      xhr.send();
+    } else {
+      xhr.open('POST', URL_UPLOAD);
+      xhr.send(data);
+    }
   };
 
   window.load = {
-    downloadData: downloadData
+    loadData: loadData
   };
 })();

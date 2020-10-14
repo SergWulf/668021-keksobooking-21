@@ -39,7 +39,7 @@
       formFilters.children[i].removeAttribute('disabled');
     }
     // Загружаем JSON данные после активации
-    window.load.downloadData(getData, outError);
+    window.load.loadData(false, getData, outError);
   };
 
   // Обработчики событий: активируют страницу кексобукинга

@@ -10,31 +10,6 @@
   const mapAdverts = document.querySelector('.map');
   const mapPin = document.querySelector('.map__pin--main');
 
-  // Функция деактивации: удаляются метки, деактивируется карта
-  // блокируются фильтры, форма.
-  const deactivationPage = function () {
-    mapAdverts.classList.add('map--faded');
-    window.form.adForm.classList.add('ad-form--disabled');
-
-    // Блокируем изменение атрибутов формы
-    for (let i = 0; i < window.form.adForm.children.length; i++) {
-      window.form.adForm.children[i].setAttribute('disabled', 'disabled');
-    }
-
-    // Блокируем изменение атрибутов блока фильтров
-    for (let i = 0; i < formFilters.children.length; i++) {
-      formFilters.children[i].setAttribute('disabled', 'disabled');
-    }
-
-    // Записать начальные данные координат в форму объявления
-    window.form.adForm.querySelector('#address').setAttribute('value', window.data.LEFT_MAP_PIN + ', ' + window.data.TOP_MAP_PIN);
-    // Поставить метку в центр карты
-    mapPin.style.left = `${window.data.LEFT_MAP_PIN - window.data.HALF_WIDTH_MAIN_PIN}px`;
-    mapPin.style.top = `${window.data.TOP_MAP_PIN - window.data.HALF_HEIGHT_MAIN_PIN}px`;
-  };
-
-  deactivationPage();
-
   const renderPinsJSON = function () {
     // Находим блок, где будем отображать метки и отображаем их
     const blockPins = document.querySelector('.map__pins');
@@ -64,7 +39,7 @@
       formFilters.children[i].removeAttribute('disabled');
     }
     // Загружаем JSON данные после активации
-    window.load.downloadData(getData, outError);
+    window.load.loadData(getData, outError, 'GET', window.data.URL_DOWNLOAD);
   };
 
   // Обработчики событий: активируют страницу кексобукинга
@@ -90,6 +65,42 @@
   // Вешаем 2 обработчика событий на главную метку
   mapPin.addEventListener('keydown', buttonKeyDownHandler);
   mapPin.addEventListener('mousedown', buttonMouseDownHandler);
+
+  // Функция деактивации: удаляются метки, деактивируется карта
+  // блокируются фильтры, форма.
+  const deactivationPage = function () {
+    mapAdverts.classList.add('map--faded');
+    window.form.adForm.reset();
+    window.form.adForm.classList.add('ad-form--disabled');
+
+    // Блокируем изменение атрибутов формы
+    for (let i = 0; i < window.form.adForm.children.length; i++) {
+      window.form.adForm.children[i].setAttribute('disabled', 'disabled');
+    }
+
+    // Блокируем изменение атрибутов блока фильтров
+    for (let i = 0; i < formFilters.children.length; i++) {
+      formFilters.children[i].setAttribute('disabled', 'disabled');
+    }
+
+    // Записать начальные данные координат в форму объявления
+    window.form.adForm.querySelector('#address').setAttribute('value', window.data.LEFT_MAP_PIN + ', ' + window.data.TOP_MAP_PIN);
+    // Поставить метку в центр карты
+    mapPin.style.left = `${window.data.LEFT_MAP_PIN - window.data.HALF_WIDTH_MAIN_PIN}px`;
+    mapPin.style.top = `${window.data.TOP_MAP_PIN - window.data.HALF_HEIGHT_MAIN_PIN}px`;
+
+    // Находим и удаляем метки
+    const blockPins = document.querySelector('.map__pins');
+    for (let i = 0; i < window.data.realEstates.length; i++) {
+      blockPins.removeChild(blockPins.lastChild);
+    }
+
+    // Вешаем заново 2 обработчика событий на главную метку
+    mapPin.addEventListener('keydown', buttonKeyDownHandler);
+    mapPin.addEventListener('mousedown', buttonMouseDownHandler);
+  };
+
+  deactivationPage();
 
   // Обработчик события клика мыши на метке для отображения карточки объявления
   mapAdverts.addEventListener('click', function (evt) {
@@ -117,32 +128,11 @@
     }
   });
 
-  // Пока не совсем понял, куда запихнуть обработчик кнопки сброса формы,
-  // модуль "form.js" у меня идёт до модуля "map.js",
-  // Но в модуле формы я не могу его объявить, потому что он использует данные модуля "map.js"
-  // Пока здесь размещу, дальше по ходу разберусь, как правильно.
-  const buttonFormReset = document.querySelector('.ad-form__reset');
-  const buttonResetClickHandler = function (evtReset) {
-    evtReset.preventDefault();
-    window.form.adForm.reset();
-    // Деактивируем главную страницу
-    deactivationPage();
-    // Находим и удаляем метки
-    const blockPins = document.querySelector('.map__pins');
-    for (let i = 0; i < window.data.realEstates.length; i++) {
-      blockPins.removeChild(blockPins.lastChild);
-    }
-    // Вешаем заново 2 обработчика событий на главную метку
-    mapPin.addEventListener('keydown', buttonKeyDownHandler);
-    mapPin.addEventListener('mousedown', buttonMouseDownHandler);
-  };
-
-  buttonFormReset.addEventListener('click', buttonResetClickHandler);
-
   // Экспорт данных
   window.map = {
     mapAdverts: mapAdverts,
-    mapPin: mapPin
+    mapPin: mapPin,
+    deactivationPage: deactivationPage
   };
 })();
 

@@ -10,16 +10,26 @@
   let dataFormFilters = new FormData(formFilters);
 
   // Функция получения текущих данных формы фильтров.
+  /*
   const currentDataFormFilters = function () {
     dataFormFilters = new FormData(formFilters);
   };
+  */
 
   // Функция фильтрации массива
-  const filtrationRealEstates = function (housingType, housingPrice, housingRooms, housingGuests, features) {
+  const filtrationRealEstates = function () {
     // На основе данных фильтров, формируем новый массив
+    dataFormFilters = new FormData(formFilters);
+    // housingType, housingPrice, housingRooms, housingGuests, features
+    // Список пар ключ/значение
+    for(let [name, value] of dataFormFilters) {
+      alert(`${name} = ${value}`); // key1=value1, потом key2=value2
+    }
+    /*
     window.data.filterRealEstates = window.data.realEstates.filter(function (realEstate) {
       // return realEstate
     });
+    */
   }
 
   // Функция создания массива отвечающего требованиям фильтров сортировки
@@ -46,7 +56,7 @@
     // Вызываем функцию отрисовки меток по JSON данным
     // Фильтрация
     // 1. Получить список фильтров
-    currentDataFormFilters();
+    filtrationRealEstates()
     // 2. Вызвать функцию фильтрации.
     // 3. На основе фильтров, сформировать массив filterRealEstates
     // 4. Передать его на отрисовку.

@@ -37,8 +37,15 @@
     'flat': 1000
   };
 
+  const COUNT_SHOW_PINS = 5;
+
+  // Массив для хранения данных об объектах недвижимости
   let realEstates = [];
+  // Массив отфильтрованных данных
+  let filterRealEstates = [];
   let errorsJSON = '';
+  // Количество отображаемых меток на карте
+
 
   const URL_DOWNLOAD = 'https://21.javascript.pages.academy/keksobooking/data';
   const URL_UPLOAD = 'https://21.javascript.pages.academy/keksobooking';
@@ -58,6 +65,8 @@
     TYPE_RESIDENCE: TYPE_RESIDENCE,
     TYPE_RESIDENCE_PRICE: TYPE_RESIDENCE_PRICE,
     realEstates: realEstates,
+    filterRealEstates: filterRealEstates,
+    COUNT_SHOW_PINS: COUNT_SHOW_PINS,
     errorsJSON: errorsJSON,
     URL_UPLOAD: URL_UPLOAD,
     URL_DOWNLOAD: URL_DOWNLOAD

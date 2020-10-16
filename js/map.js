@@ -6,6 +6,27 @@
   // Находим блок фильтров в DOM
   const formFilters = document.querySelector('.map__filters');
 
+  // Получаем начальные данных формы фильтров
+  let dataFormFilters = new FormData(formFilters);
+
+  // Функция получения текущих данных формы фильтров.
+  const currentDataFormFilters = function () {
+    dataFormFilters = new FormData(formFilters);
+  };
+
+  // Функция фильтрации массива
+  const filtrationRealEstates = function (housingType, housingPrice, housingRooms, housingGuests, features) {
+    // На основе данных фильтров, формируем новый массив
+    window.data.filterRealEstates = window.data.realEstates.filter(function (realEstate) {
+      // return realEstate
+    });
+  }
+
+  // Функция создания массива отвечающего требованиям фильтров сортировки
+  const createFilterRealEstates = function () {
+
+  };
+
   // Находим карту объявлений и главную метку в DOM
   const mapAdverts = document.querySelector('.map');
   const mapPin = document.querySelector('.map__pin--main');
@@ -13,7 +34,7 @@
   const renderPinsJSON = function () {
     // Находим блок, где будем отображать метки и отображаем их
     const blockPins = document.querySelector('.map__pins');
-    blockPins.appendChild(window.pin.renderPins(window.data.realEstates));
+    blockPins.appendChild(window.pin.renderPins(window.data.filterRealEstates));
   };
 
   const outError = function (message) {
@@ -23,6 +44,14 @@
   const getData = function (dataJSON) {
     window.data.realEstates = dataJSON;
     // Вызываем функцию отрисовки меток по JSON данным
+    // Фильтрация
+    // 1. Получить список фильтров
+    currentDataFormFilters();
+    // 2. Вызвать функцию фильтрации.
+    // 3. На основе фильтров, сформировать массив filterRealEstates
+    // 4. Передать его на отрисовку.
+    // .
+
     renderPinsJSON();
   };
 
@@ -66,6 +95,17 @@
   mapPin.addEventListener('keydown', buttonKeyDownHandler);
   mapPin.addEventListener('mousedown', buttonMouseDownHandler);
 
+  // Функция удаления меток
+  const removePins = function () {
+    // Находим и удаляем метки
+    const blockPins = document.querySelector('.map__pins');
+    // Подставляем значения по фильтрам
+    for (let i = 0; i < window.data.filterRealEstates.length; i++) {
+      blockPins.removeChild(blockPins.lastChild);
+    }
+  };
+
+
   // Функция деактивации: удаляются метки, деактивируется карта
   // блокируются фильтры, форма.
   const deactivationPage = function () {
@@ -89,11 +129,8 @@
     mapPin.style.left = `${window.data.LEFT_MAP_PIN - window.data.HALF_WIDTH_MAIN_PIN}px`;
     mapPin.style.top = `${window.data.TOP_MAP_PIN - window.data.HALF_HEIGHT_MAIN_PIN}px`;
 
-    // Находим и удаляем метки
-    const blockPins = document.querySelector('.map__pins');
-    for (let i = 0; i < window.data.realEstates.length; i++) {
-      blockPins.removeChild(blockPins.lastChild);
-    }
+    // Удаление меток
+    removePins();
 
     // Вешаем заново 2 обработчика событий на главную метку
     mapPin.addEventListener('keydown', buttonKeyDownHandler);

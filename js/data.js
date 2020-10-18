@@ -37,6 +37,14 @@
     'flat': 1000
   };
 
+  // Соответствие между названиями данных фильров в форме и в объекте недвижимости
+  const FILTER_TYPE = {
+    'housing-price' : 'price',
+    'housing-type' : 'type',
+    'housing-rooms' : 'rooms',
+    'housing-guests' : 'guests'
+  }
+
   const COUNT_SHOW_PINS = 5;
 
   // Массив для хранения данных об объектах недвижимости
@@ -69,7 +77,8 @@
     COUNT_SHOW_PINS: COUNT_SHOW_PINS,
     errorsJSON: errorsJSON,
     URL_UPLOAD: URL_UPLOAD,
-    URL_DOWNLOAD: URL_DOWNLOAD
+    URL_DOWNLOAD: URL_DOWNLOAD,
+    FILTER_TYPE: FILTER_TYPE
   };
 
 })();

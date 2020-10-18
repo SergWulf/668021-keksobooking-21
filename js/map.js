@@ -5,37 +5,75 @@
 (function () {
   // Находим блок фильтров в DOM
   const formFilters = document.querySelector('.map__filters');
+  const housingValues = formFilters.querySelectorAll('.map__filter');
+  const featuresValues = formFilters.querySelector('.map__features').querySelectorAll('.map__checkbox');
 
-  // Получаем начальные данных формы фильтров
-  let dataFormFilters = new FormData(formFilters);
-
-  // Функция получения текущих данных формы фильтров.
   /*
-  const currentDataFormFilters = function () {
-    dataFormFilters = new FormData(formFilters);
-  };
+  const housingType = formFilters.querySelector('#housing-type');
+  const housingPrice = formFilters.querySelector('#housing-price');
+  const housingRooms = formFilters.querySelector('#housing-rooms');
+  const housingGuests = formFilters.querySelector('#housing-guests');
+  //const features = formFilters.querySelector()
   */
 
   // Функция фильтрации массива
   const filtrationRealEstates = function () {
-    // На основе данных фильтров, формируем новый массив
+    // Получаем данные формы фильтрации
     dataFormFilters = new FormData(formFilters);
-    // housingType, housingPrice, housingRooms, housingGuests, features
-    // Список пар ключ/значение
+    // На основе данных создаем map со значениями фильтров
+    const valuesFormFilters = new Map();
     for(let [name, value] of dataFormFilters) {
-      alert(`${name} = ${value}`); // key1=value1, потом key2=value2
+      if (name === 'features') {
+        valuesFormFilters.set(value, value);
+      } else {
+        valuesFormFilters.set(window.data.FILTER_TYPE[name], value);
+      }
+
     }
-    /*
+
+    for (let key of valuesFormFilters) {
+      console.log(key);
+    }
+
+    // Используем встроенную функцию фильтрации, получаем новый массив
+    // Формируем
+
+
     window.data.filterRealEstates = window.data.realEstates.filter(function (realEstate) {
-      // return realEstate
+      // В данной функции нужно определить, по каким фильтрам
+       return ((realEstate['offer']['type'] === valuesFormFilters.get('type')) || (valuesFormFilters.get('type') === 'any')) &&
+         ((realEstate['offer']['price'] === valuesFormFilters.get('price')) || (valuesFormFilters.get('price') === 'any')) &&
+         ((realEstate['offer']['rooms'] === valuesFormFilters.get('rooms')) || (valuesFormFilters.get('rooms') === 'any')) &&
+         ((realEstate['offer']['guests'] === valuesFormFilters.get('guests')) || (valuesFormFilters.get('guests') === 'any'));
     });
-    */
+
   }
 
   // Функция создания массива отвечающего требованиям фильтров сортировки
   const createFilterRealEstates = function () {
 
   };
+
+  // 2 цикла перебора коллекций (фильтров select и checkbox)
+  // На каждый select и checkbox устанавливаем обработчик события change
+  // в котором вызываем коллбэк функцию фильтрации
+
+  for (let i = 0; i < housingValues.length; i++) {
+    housingValues[i].addEventListener('change', filtrationRealEstates);
+  }
+
+  for (let i = 0; i < featuresValues.length; i++) {
+    featuresValues[i].addEventListener('change', filtrationRealEstates);
+  }
+
+  // Получаем новый отфильтрованный масссив,
+  // Стираем метки на карте,
+  // Отображаем новые отфильтрованные метки.
+
+
+
+  // Получаем начальные данных формы фильтров
+  let dataFormFilters = new FormData(formFilters);
 
   // Находим карту объявлений и главную метку в DOM
   const mapAdverts = document.querySelector('.map');

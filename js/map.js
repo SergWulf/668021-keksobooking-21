@@ -16,8 +16,22 @@
   //const features = formFilters.querySelector()
   */
 
+  // Получаем начальные данных формы фильтров
+  let dataFormFilters = new FormData(formFilters);
+
+  // Находим карту объявлений и главную метку в DOM
+  const mapAdverts = document.querySelector('.map');
+  const mapPin = document.querySelector('.map__pin--main');
+
+  const renderPinsJSON = function () {
+    // Находим блок, где будем отображать метки и отображаем их
+    const blockPins = document.querySelector('.map__pins');
+    blockPins.appendChild(window.pin.renderPins(window.data.filterRealEstates));
+  };
+
   // Функция фильтрации массива
   const filtrationRealEstates = function () {
+
     // Получаем данные формы фильтрации
     dataFormFilters = new FormData(formFilters);
     // На основе данных создаем map со значениями фильтров
@@ -47,6 +61,8 @@
          ((realEstate['offer']['guests'] === valuesFormFilters.get('guests')) || (valuesFormFilters.get('guests') === 'any'));
     });
 
+    removePins();
+    renderPinsJSON();
   }
 
   // Функция создания массива отвечающего требованиям фильтров сортировки
@@ -72,18 +88,7 @@
 
 
 
-  // Получаем начальные данных формы фильтров
-  let dataFormFilters = new FormData(formFilters);
 
-  // Находим карту объявлений и главную метку в DOM
-  const mapAdverts = document.querySelector('.map');
-  const mapPin = document.querySelector('.map__pin--main');
-
-  const renderPinsJSON = function () {
-    // Находим блок, где будем отображать метки и отображаем их
-    const blockPins = document.querySelector('.map__pins');
-    blockPins.appendChild(window.pin.renderPins(window.data.filterRealEstates));
-  };
 
   const outError = function (message) {
     window.data.errorsJSON = message;
@@ -100,7 +105,7 @@
     // 4. Передать его на отрисовку.
     // .
 
-    renderPinsJSON();
+ //   renderPinsJSON();
   };
 
   // Функция активации: рисуются метки, активируется карта
@@ -148,8 +153,11 @@
     // Находим и удаляем метки
     const blockPins = document.querySelector('.map__pins');
     // Подставляем значения по фильтрам
-    for (let i = 0; i < window.data.filterRealEstates.length; i++) {
-      blockPins.removeChild(blockPins.lastChild);
+    if (blockPins.children.length > 2) {
+      console.log(window.data.filterRealEstates.length);
+      for (let i = 0; i < window.data.filterRealEstates.length; i++) {
+        blockPins.removeChild(blockPins.lastChild);
+      }
     }
   };
 

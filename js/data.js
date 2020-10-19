@@ -39,11 +39,16 @@
 
   // Соответствие между названиями данных фильров в форме и в объекте недвижимости
   const FILTER_TYPE = {
-    'housing-price' : 'price',
-    'housing-type' : 'type',
-    'housing-rooms' : 'rooms',
-    'housing-guests' : 'guests'
-  }
+    'housing-price': 'price',
+    'housing-type': 'type',
+    'housing-rooms': 'rooms',
+    'housing-guests': 'guests'
+  };
+
+  const FILTER_PRICE = {
+    'high': 50000,
+    'low': 10000
+  };
 
   const COUNT_SHOW_PINS = 5;
 
@@ -53,7 +58,7 @@
   let filterRealEstates = [];
   let errorsJSON = '';
   // Количество отображаемых меток на карте
-
+  let currentCountShowPins = COUNT_SHOW_PINS;
 
   const URL_DOWNLOAD = 'https://21.javascript.pages.academy/keksobooking/data';
   const URL_UPLOAD = 'https://21.javascript.pages.academy/keksobooking';
@@ -75,10 +80,12 @@
     realEstates: realEstates,
     filterRealEstates: filterRealEstates,
     COUNT_SHOW_PINS: COUNT_SHOW_PINS,
+    currentCountShowPins: currentCountShowPins,
     errorsJSON: errorsJSON,
     URL_UPLOAD: URL_UPLOAD,
     URL_DOWNLOAD: URL_DOWNLOAD,
-    FILTER_TYPE: FILTER_TYPE
+    FILTER_TYPE: FILTER_TYPE,
+    FILTER_PRICE: FILTER_PRICE
   };
 
 })();

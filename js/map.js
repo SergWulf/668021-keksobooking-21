@@ -58,15 +58,16 @@
     dataFormFilters = new FormData(formFilters);
     // На основе данных создаем map со значениями фильтров
     const valuesFormFilters = new Map();
+    // Создаем отдельный массив для хранения выбранных фильтров формы features
+    const valuesFeatures = [];
     for (let [name, value] of dataFormFilters) {
       if (name === 'features') {
-        valuesFormFilters.set(value, value);
+        valuesFeatures.push(value);
       } else {
         valuesFormFilters.set(window.data.FILTER_TYPE[name], value);
       }
 
     }
-
     // Используем встроенную функцию фильтрации, получаем новый массив
     window.data.filterRealEstates = window.data.realEstates.filter(function (realEstate) {
       // В данной функции нужно определить, по каким фильтрам
@@ -95,7 +96,32 @@
           })()
         ) || (valuesFormFilters.get('price') === 'any')) &&
         ((realEstate['offer']['rooms'] === Number(valuesFormFilters.get('rooms'))) || (valuesFormFilters.get('rooms') === 'any')) &&
-        ((realEstate['offer']['guests'] === Number(valuesFormFilters.get('guests'))) || (valuesFormFilters.get('guests') === 'any'));
+        ((realEstate['offer']['guests'] === Number(valuesFormFilters.get('guests'))) || (valuesFormFilters.get('guests') === 'any')) &&
+        (function () {
+          // Проверяем, выбраны ли фильтры features в форме
+          if (valuesFeatures.length !== 0) {
+            // Проверяем, есть ли фильтры features в объявлении
+            if (realEstate['offer']['features'].length !== 0) {
+              // Цикл из количества выбранных фильтров
+              for (let i = 0; i < valuesFeatures.length; i++) {
+                // Проверить, есть ли значение данного фильтра features в массиве у объекта
+                // Если есть, то булевой переменной присвоить true, если нет, то присвоить false
+                // и сразу вернуть из анонимной функции false, то есть данный объект не подходит
+                // по условиям фильтрации.
+                if ((realEstate['offer']['features'].indexOf(valuesFeatures[i])) === -1) {
+                  return false;
+                }
+              }
+            } else {
+              // Если фильтры выбраны, а массив features у объекта пустой, то возвращяем false, такой объект
+              // не подходит по условиям фильтрации
+              return false;
+            }
+          }
+          // если фильтров не выбрано, то возвращаем true, то подходят объекты с любым количеством фильтров
+          // либо фильтры выбраны, и нигде не сработало false, то есть в этом объекте есть значения данного фильтра
+          return true;
+        })();
     });
 
     renderPinsJSON();

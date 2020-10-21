@@ -18,15 +18,15 @@
   // Функция удаления меток
   const removePins = function () {
     // Находим и удаляем метки
-    const blockPins = document.querySelector('.map__pins');
-    const liveBlockPins = blockPins.children;
-
-    // Подставляем значения по фильтрам
-    if (liveBlockPins.length > 2) {
-      for (let i = 0; i < window.data.currentCountShowPins; i++) {
-        liveBlockPins[liveBlockPins.length - 1].remove();
-      }
-    }
+    const pins = document.querySelectorAll('.map__pin:not(.map__pin--main');
+    // Успешно скомуниздил со stackoverflow.com ))
+    // Понял что пробегает по меткам, и удаляет их,
+    // но как он их делает живыми, то есть как он связывается с node
+    // В общем много чего не понял(prototype, call), но красивый код, всё работает,
+    // почитаю сегодня подробней об этом ))))
+    Array.prototype.forEach.call(pins, function (node) {
+      node.parentNode.removeChild(node);
+    });
   };
 
   const outError = function (message) {

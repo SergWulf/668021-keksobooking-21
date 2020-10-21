@@ -21,7 +21,7 @@
         window.map.mapAdverts.querySelector('.map__card').classList.add('hidden');
       }
     }
-
+    // Очищаем карту от предыдущих меток
     window.map.removePins();
     // Получаем данные формы фильтрации
     dataFormFilters = new FormData(formFilters);
@@ -35,62 +35,65 @@
       } else {
         valuesFormFilters.set(window.data.FILTER_TYPE[name], value);
       }
-
     }
-    // Используем встроенную функцию фильтрации, получаем новый массив
-    window.data.filterRealEstates = window.data.realEstates.filter(function (realEstate) {
-      // В данной функции нужно определить, по каким фильтрам
-      return ((realEstate['offer']['type'] === valuesFormFilters.get('type')) || (valuesFormFilters.get('type') === 'any')) &&
-        ((
-          (function () {
-            if (valuesFormFilters.get('price') === 'middle') {
-              if ((realEstate['offer']['price'] < window.data.FILTER_PRICE['high']) &&
-                (realEstate['offer']['price'] > window.data.FILTER_PRICE['low'])) {
-                return true;
-              }
-            }
+    // Функция проверки по цене, если у объекта недвижимости и фильтра по цене данные совпадают, то вернут true
+    const checkFilterPrice = function (realEstatePrice) {
+      // Булева переменная, если true, то подходит объект недвижимости по значению цены
+      let priceFilter = false;
+      if (valuesFormFilters.get('price') === 'middle') {
+        if ((realEstatePrice < window.data.FILTER_PRICE['high']) &&
+          (realEstatePrice > window.data.FILTER_PRICE['low'])) {
+          priceFilter = true;
+        }
+      }
 
-            if (valuesFormFilters.get('price') === 'high') {
-              if (realEstate['offer']['price'] > window.data.FILTER_PRICE['high']) {
-                return true;
-              }
-            }
+      if (valuesFormFilters.get('price') === 'high') {
+        if (realEstatePrice > window.data.FILTER_PRICE['high']) {
+          priceFilter = true;
+        }
+      }
 
-            if (valuesFormFilters.get('price') === 'low') {
-              if (realEstate['offer']['price'] < window.data.FILTER_PRICE['low']) {
-                return true;
-              }
-            }
-            return false;
-          })()
-        ) || (valuesFormFilters.get('price') === 'any')) &&
-        ((realEstate['offer']['rooms'] === Number(valuesFormFilters.get('rooms'))) || (valuesFormFilters.get('rooms') === 'any')) &&
-        ((realEstate['offer']['guests'] === Number(valuesFormFilters.get('guests'))) || (valuesFormFilters.get('guests') === 'any')) &&
-        (function () {
-          // Проверяем, выбраны ли фильтры features в форме
-          if (valuesFeatures.length !== 0) {
-            // Проверяем, есть ли фильтры features в объявлении
-            if (realEstate['offer']['features'].length !== 0) {
-              // Цикл из количества выбранных фильтров
-              for (let i = 0; i < valuesFeatures.length; i++) {
-                // Проверить, есть ли значение данного фильтра features в массиве у объекта
-                // Если есть, то булевой переменной присвоить true, если нет, то присвоить false
-                // и сразу вернуть из анонимной функции false, то есть данный объект не подходит
-                // по условиям фильтрации.
-                if ((realEstate['offer']['features'].indexOf(valuesFeatures[i])) === -1) {
-                  return false;
-                }
-              }
-            } else {
-              // Если фильтры выбраны, а массив features у объекта пустой, то возвращяем false, такой объект
-              // не подходит по условиям фильтрации
-              return false;
+      if (valuesFormFilters.get('price') === 'low') {
+        if (realEstatePrice < window.data.FILTER_PRICE['low']) {
+          priceFilter = true;
+        }
+      }
+      return priceFilter;
+    };
+
+    const checkFilterFeatures = function (realEstateFeatures) {
+      // Булева переменная, если true, то подходит объект нидвижимости по значению цены
+      let featuresFilter = true;
+      // Проверяем, выбраны ли фильтры features в форме
+      if (valuesFeatures.length !== 0) {
+        // Проверяем, есть ли фильтры features в объявлении
+        if (realEstateFeatures.length !== 0) {
+          // Цикл из количества выбранных фильтров
+          for (let i = 0; i < valuesFeatures.length; i++) {
+            // Проверить, есть ли значение данного фильтра features в массиве у объекта
+            // если нет, то присвоить false
+            if ((realEstateFeatures.indexOf(valuesFeatures[i])) === -1) {
+              featuresFilter = false;
             }
           }
-          // если фильтров не выбрано, то возвращаем true, то подходят объекты с любым количеством фильтров
-          // либо фильтры выбраны, и нигде не сработало false, то есть в этом объекте есть значения данного фильтра
-          return true;
-        })();
+        } else {
+          // Если фильтры выбраны, а массив features у объекта пустой, то присваиваем false, такой объект
+          // не подходит по условиям фильтрации
+          featuresFilter = false;
+        }
+      }
+      // если фильтров не выбрано, либо условия фильтрации не наружены,
+      // то возвращаем true,
+      return featuresFilter;
+    };
+
+    // Используем встроенную функцию фильтрации, получаем новый массив соответсвующий выбранным фильтрам
+    window.data.filterRealEstates = window.data.realEstates.filter(function (realEstate) {
+      return ((realEstate['offer']['type'] === valuesFormFilters.get('type')) || (valuesFormFilters.get('type') === 'any')) &&
+        ((checkFilterPrice(realEstate['offer']['price'])) || (valuesFormFilters.get('price') === 'any')) &&
+        ((realEstate['offer']['rooms'] === Number(valuesFormFilters.get('rooms'))) || (valuesFormFilters.get('rooms') === 'any')) &&
+        ((realEstate['offer']['guests'] === Number(valuesFormFilters.get('guests'))) || (valuesFormFilters.get('guests') === 'any')) &&
+        checkFilterFeatures(realEstate['offer']['features']);
     });
 
     window.map.renderPinsJSON();

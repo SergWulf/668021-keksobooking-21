@@ -21,13 +21,8 @@
   const renderPins = function (realEstatesPin) {
     const fragment = document.createDocumentFragment();
 
-    // По количество меток меньше значения константы, то отобразить только их,
-    // если больше, то ограничится значением константы
-    if (realEstatesPin.length < window.data.COUNT_SHOW_PINS) {
-      window.data.currentCountShowPins = realEstatesPin.length;
-    } else {
-      window.data.currentCountShowPins = window.data.COUNT_SHOW_PINS;
-    }
+    // По количество меток меньше значения константы, то отобразить только их, если больше, то ограничится значением константы
+    window.data.currentCountShowPins = (realEstatesPin.length < window.data.COUNT_SHOW_PINS) ? realEstatesPin.length : window.data.COUNT_SHOW_PINS;
 
     for (let i = 0; i < window.data.currentCountShowPins; i++) {
       const newPinElement = renderPin(realEstatesPin[i]);

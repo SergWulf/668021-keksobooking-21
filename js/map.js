@@ -8,14 +8,6 @@
   const housingValues = formFilters.querySelectorAll('.map__filter');
   const featuresValues = formFilters.querySelector('.map__features').querySelectorAll('.map__checkbox');
 
-  /*
-  const housingType = formFilters.querySelector('#housing-type');
-  const housingPrice = formFilters.querySelector('#housing-price');
-  const housingRooms = formFilters.querySelector('#housing-rooms');
-  const housingGuests = formFilters.querySelector('#housing-guests');
-  //const features = formFilters.querySelector()
-  */
-
   // Получаем начальные данных формы фильтров
   let dataFormFilters = new FormData(formFilters);
 

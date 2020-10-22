@@ -8,10 +8,10 @@
   // Находим блок фильтров в DOM
   const formFilters = document.querySelector('.map__filters');
   const housingValues = formFilters.querySelectorAll('.map__filter');
-  const featuresValues = formFilters.querySelector('.map__features').querySelectorAll('.map__checkbox');
+  const featuresValues = formFilters.querySelectorAll('.map__features .map__checkbox');
 
   // Получаем начальные данных формы фильтров
-  let dataFormFilters = new FormData(formFilters);
+  // let dataFormFilters = new FormData(formFilters);
 
   // Функция фильтрации массива
   const filtrationRealEstates = function () {
@@ -23,41 +23,38 @@
     }
     // Очищаем карту от предыдущих меток
     window.map.removePins();
-    // Получаем данные формы фильтрации
-    dataFormFilters = new FormData(formFilters);
-    // На основе данных создаем map со значениями фильтров
+
+    // На основе данных создаем map со значениями фильтров selected
     const valuesFormFilters = new Map();
-    // Создаем отдельный массив для хранения выбранных фильтров формы features
+    // Создаем отдельный массив для хранения выбранных фильтров features
     const valuesFeatures = [];
-    for (let [name, value] of dataFormFilters) {
-      if (name === 'features') {
-        valuesFeatures.push(value);
-      } else {
-        valuesFormFilters.set(window.data.FILTER_TYPE[name], value);
+    // Получаем выбранные значения фильтров из формы
+    const checkedFilters = formFilters.querySelectorAll(':checked');
+    for (let checkedFilter of checkedFilters) {
+      if (checkedFilter.tagName === 'OPTION') {
+        valuesFormFilters.set(window.data.FILTER_TYPE[checkedFilter.parentNode.name], checkedFilter.value);
+      }
+      if (checkedFilter.tagName === 'INPUT') {
+        valuesFeatures.push(checkedFilter.value);
       }
     }
+
     // Функция проверки по цене, если у объекта недвижимости и фильтра по цене данные совпадают, то вернут true
     const checkFilterPrice = function (realEstatePrice) {
       // Булева переменная, если true, то подходит объект недвижимости по значению цены
       let priceFilter = false;
-      if (valuesFormFilters.get('price') === 'middle') {
-        if ((realEstatePrice < window.data.FILTER_PRICE['high']) &&
-          (realEstatePrice > window.data.FILTER_PRICE['low'])) {
-          priceFilter = true;
-        }
+
+      switch (valuesFormFilters.get('price')) {
+        case 'middle':
+          priceFilter = (realEstatePrice <= window.data.FILTER_PRICE['high']) && (realEstatePrice >= window.data.FILTER_PRICE['low']);
+          break;
+        case 'high':
+          priceFilter = ((valuesFormFilters.get('price') === 'high') && (realEstatePrice > window.data.FILTER_PRICE['high']));
+          break;
+        case 'low':
+          priceFilter = ((valuesFormFilters.get('price') === 'low') && (realEstatePrice < window.data.FILTER_PRICE['low']));
       }
 
-      if (valuesFormFilters.get('price') === 'high') {
-        if (realEstatePrice > window.data.FILTER_PRICE['high']) {
-          priceFilter = true;
-        }
-      }
-
-      if (valuesFormFilters.get('price') === 'low') {
-        if (realEstatePrice < window.data.FILTER_PRICE['low']) {
-          priceFilter = true;
-        }
-      }
       return priceFilter;
     };
 

@@ -20,7 +20,11 @@
   // Функция отрисовки всех меток во фрагмент
   const renderPins = function (realEstatesPin) {
     const fragment = document.createDocumentFragment();
-    for (let i = 0; i < realEstatesPin.length; i++) {
+
+    // По количество меток меньше значения константы, то отобразить только их, если больше, то ограничится значением константы
+    window.data.currentCountShowPins = (realEstatesPin.length < window.data.COUNT_SHOW_PINS) ? realEstatesPin.length : window.data.COUNT_SHOW_PINS;
+
+    for (let i = 0; i < window.data.currentCountShowPins; i++) {
       const newPinElement = renderPin(realEstatesPin[i]);
       newPinElement.setAttribute('data-index', i);
       fragment.appendChild(newPinElement);

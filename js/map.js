@@ -3,17 +3,30 @@
 // Модуль карты: создание меток, отображение карточек, обработка событий
 
 (function () {
-  // Находим блок фильтров в DOM
-  const formFilters = document.querySelector('.map__filters');
 
   // Находим карту объявлений и главную метку в DOM
   const mapAdverts = document.querySelector('.map');
   const mapPin = document.querySelector('.map__pin--main');
 
+  // Функция отображения меток
   const renderPinsJSON = function () {
     // Находим блок, где будем отображать метки и отображаем их
     const blockPins = document.querySelector('.map__pins');
-    blockPins.appendChild(window.pin.renderPins(window.data.realEstates));
+    blockPins.appendChild(window.pin.renderPins(window.data.filterRealEstates));
+  };
+
+  // Функция удаления меток
+  const removePins = function () {
+    // Находим и удаляем метки
+    const pins = document.querySelectorAll('.map__pin:not(.map__pin--main');
+    // Успешно скомуниздил со stackoverflow.com ))
+    // Понял что пробегает по меткам, и удаляет их,
+    // но как он их делает живыми, то есть как он связывается с node
+    // В общем много чего не понял(prototype, call), но красивый код, всё работает,
+    // почитаю сегодня подробней об этом ))))
+    Array.prototype.forEach.call(pins, function (node) {
+      node.parentNode.removeChild(node);
+    });
   };
 
   const outError = function (message) {
@@ -22,6 +35,7 @@
 
   const getData = function (dataJSON) {
     window.data.realEstates = dataJSON;
+    window.data.filterRealEstates = dataJSON;
     // Вызываем функцию отрисовки меток по JSON данным
     renderPinsJSON();
   };
@@ -31,12 +45,12 @@
   const activationPage = function () {
     mapAdverts.classList.remove('map--faded');
     window.form.adForm.classList.remove('ad-form--disabled');
-    formFilters.classList.remove('ad-form--disabled');
+    window.filter.formFilters.classList.remove('ad-form--disabled');
     for (let i = 0; i < window.form.adForm.children.length; i++) {
       window.form.adForm.children[i].removeAttribute('disabled');
     }
-    for (let i = 0; i < formFilters.children.length; i++) {
-      formFilters.children[i].removeAttribute('disabled');
+    for (let i = 0; i < window.filter.formFilters.children.length; i++) {
+      window.filter.formFilters.children[i].removeAttribute('disabled');
     }
     // Загружаем JSON данные после активации
     window.load.loadData(getData, outError, 'GET', window.data.URL_DOWNLOAD);
@@ -79,8 +93,8 @@
     }
 
     // Блокируем изменение атрибутов блока фильтров
-    for (let i = 0; i < formFilters.children.length; i++) {
-      formFilters.children[i].setAttribute('disabled', 'disabled');
+    for (let i = 0; i < window.filter.formFilters.children.length; i++) {
+      window.filter.formFilters.children[i].setAttribute('disabled', 'disabled');
     }
 
     // Записать начальные данные координат в форму объявления
@@ -89,11 +103,8 @@
     mapPin.style.left = `${window.data.LEFT_MAP_PIN - window.data.HALF_WIDTH_MAIN_PIN}px`;
     mapPin.style.top = `${window.data.TOP_MAP_PIN - window.data.HALF_HEIGHT_MAIN_PIN}px`;
 
-    // Находим и удаляем метки
-    const blockPins = document.querySelector('.map__pins');
-    for (let i = 0; i < window.data.realEstates.length; i++) {
-      blockPins.removeChild(blockPins.lastChild);
-    }
+    // Удаление меток
+    removePins();
 
     // Вешаем заново 2 обработчика событий на главную метку
     mapPin.addEventListener('keydown', buttonKeyDownHandler);
@@ -117,7 +128,7 @@
         mapAdverts.removeChild(mapAdverts.querySelector('.map__card'));
       }
       // Отображаем карточку объявлений соответствующую метке.
-      mapAdverts.insertBefore(window.card.renderCard(window.data.realEstates[target.dataset.index]), mapAdverts.children[1]);
+      mapAdverts.insertBefore(window.card.renderCard(window.data.filterRealEstates[target.dataset.index]), mapAdverts.children[1]);
     }
   });
 
@@ -132,7 +143,9 @@
   window.map = {
     mapAdverts: mapAdverts,
     mapPin: mapPin,
-    deactivationPage: deactivationPage
+    deactivationPage: deactivationPage,
+    removePins: removePins,
+    renderPinsJSON: renderPinsJSON
   };
 })();
 

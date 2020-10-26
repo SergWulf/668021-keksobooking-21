@@ -80,11 +80,11 @@
     };
 
     const isHousingRooms = function (realEstateRooms) {
-      return realEstateRooms === valuesFormFilters.get('rooms') || valuesFormFilters.get('rooms') === 'any';
+      return realEstateRooms === Number(valuesFormFilters.get('rooms')) || valuesFormFilters.get('rooms') === 'any';
     };
 
     const isHousingGuests = function (realEstateGuests) {
-      return realEstateGuests === valuesFormFilters.get('guests') || valuesFormFilters.get('guests') === 'any';
+      return realEstateGuests === Number(valuesFormFilters.get('guests')) || valuesFormFilters.get('guests') === 'any';
     };
 
     // Используем встроенную функцию фильтрации, получаем новый массив соответсвующий выбранным фильтрам
@@ -100,7 +100,9 @@
   };
 
   // На каждое изменение формы фильтрации вызываем функцию фильтрации
-  formFilters.addEventListener('change', filtrationRealEstates);
+  formFilters.addEventListener('change', function () {
+    window.debounce(filtrationRealEstates);
+  });
 
   // Экспорт данных
   window.filter = {

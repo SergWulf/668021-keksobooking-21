@@ -202,6 +202,45 @@ const buttonResetClickHandler = function (evtReset) {
 
 buttonFormReset.addEventListener('click', buttonResetClickHandler);
 
+// Загрузка превью аватара и первой фотографии жилья
+const fileChooserAvatar = document.querySelector('.ad-form-header__upload input[type=file]');
+const previewAvatar = document.querySelector('.ad-form-header__preview img');
+
+fileChooserAvatar.addEventListener('change', function () {
+  const file = fileChooserAvatar.files[0];
+  const reader = new FileReader();
+
+  reader.addEventListener('load', function () {
+    previewAvatar.src = reader.result;
+  });
+
+  reader.readAsDataURL(file);
+});
+
+const fileChooserRealEstatePicture = document.querySelector('.ad-form__upload input[type=file]');
+const previewBlockRealEstate = document.querySelector('.ad-form__photo');
+const previewRealEstatePicture = document.createElement('img');
+
+// Выравнивание по центру содержимого в блоке
+previewBlockRealEstate.style = 'display: flex; justify-content: center; align-items: center';
+
+// Свойства картинки
+previewRealEstatePicture.alt = 'Фото жилья';
+previewRealEstatePicture.width = 40;
+previewRealEstatePicture.height = 44;
+previewBlockRealEstate.appendChild(previewRealEstatePicture);
+
+fileChooserRealEstatePicture.addEventListener('change', function () {
+  const file = fileChooserRealEstatePicture.files[0];
+  const reader = new FileReader();
+
+  reader.addEventListener('load', function () {
+    previewRealEstatePicture.src = reader.result;
+  });
+
+  reader.readAsDataURL(file);
+});
+
 // Экспорт данных
 window.form = {
   adForm: adForm

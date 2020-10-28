@@ -34,21 +34,19 @@ const outError = function (message) {
 const getData = function (dataJSON) {
   window.data.realEstates = dataJSON;
   window.data.filterRealEstates = dataJSON;
+  // Так как данные успешно получены, активируем форму фильтрации
+  window.filter.activationForm();
   // Вызываем функцию отрисовки меток по JSON данным
   renderPinsJSON();
 };
 
 // Функция активации: рисуются метки, активируется карта
-// блок фильтров, форма.
+// форма.
 const activationPage = function () {
   mapAdverts.classList.remove('map--faded');
   window.form.adForm.classList.remove('ad-form--disabled');
-  window.filter.formFilters.classList.remove('ad-form--disabled');
   for (let i = 0; i < window.form.adForm.children.length; i++) {
     window.form.adForm.children[i].removeAttribute('disabled');
-  }
-  for (let i = 0; i < window.filter.formFilters.children.length; i++) {
-    window.filter.formFilters.children[i].removeAttribute('disabled');
   }
   // Загружаем JSON данные после активации
   window.load.loadData(getData, outError, 'GET', window.data.URL_DOWNLOAD);

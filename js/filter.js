@@ -104,7 +104,16 @@ formFilters.addEventListener('change', function () {
   window.debounce(filtrationRealEstates);
 });
 
+// Активация полей формы с фильтрами
+const activationForm = function () {
+  formFilters.classList.remove('ad-form--disabled');
+  for (let i = 0; i < formFilters.children.length; i++) {
+    formFilters.children[i].removeAttribute('disabled');
+  }
+};
+
 // Экспорт данных
 window.filter = {
-  formFilters: formFilters
+  formFilters: formFilters,
+  activationForm: activationForm
 };

@@ -101,6 +101,11 @@ const deactivationPage = function () {
   mapPin.style.left = `${window.data.LEFT_MAP_PIN - window.data.HALF_WIDTH_MAIN_PIN}px`;
   mapPin.style.top = `${window.data.TOP_MAP_PIN - window.data.HALF_HEIGHT_MAIN_PIN}px`;
 
+  // Если есть карточка с характеристиками обьявления, то удаляем ее из разметки
+  if (mapAdverts.querySelector('.map__card')) {
+    mapAdverts.removeChild(mapAdverts.querySelector('.map__card'));
+  }
+
   // Удаление меток
   removePins();
 

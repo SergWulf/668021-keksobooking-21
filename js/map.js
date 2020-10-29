@@ -124,6 +124,16 @@ mapAdverts.addEventListener('click', function (evt) {
   }
   // Если метка содержит класс 'map__pin' и не содержит класс 'map__pin--main', то есть не является главной
   if ((target.classList.contains('map__pin')) && (!target.classList.contains('map__pin--main'))) {
+    const pinActive = document.querySelector('.map__pins .map__pin--active');
+
+    // Проверить существование класса map__pin--active у предыдущей активной метки, и удалить его
+    if (pinActive) {
+      pinActive.classList.remove('map__pin--active');
+    }
+
+    // Текущей метке добавить класс map__pin--active
+    target.classList.add('map__pin--active');
+
     // Если уже есть карточка с характеристиками обьявления, то удаляем ее из разметки
     if (mapAdverts.querySelector('.map__card')) {
       mapAdverts.removeChild(mapAdverts.querySelector('.map__card'));

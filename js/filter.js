@@ -104,6 +104,23 @@ formFilters.addEventListener('change', function () {
   window.debounce(filtrationRealEstates);
 });
 
+
+// Ловим нажатие клавишы Enter в форме фильтров, определяем где сработало событие,
+// если select или input, то вызываем событие click
+formFilters.addEventListener('keydown', function (evt) {
+  // Опеределяем, где именно произошло событие
+  let target = evt.target;
+  if (evt.key === 'Enter') {
+    if (target.tagName === 'INPUT') {
+      target.click();
+    }
+    if (target.tagName === 'SELECT') {
+      target.click();
+    }
+  }
+});
+
+
 // Активация полей формы с фильтрами
 const activationForm = function () {
   formFilters.classList.remove('ad-form--disabled');

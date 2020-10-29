@@ -105,18 +105,12 @@ formFilters.addEventListener('change', function () {
 });
 
 
-// Ловим нажатие клавишы Enter в форме фильтров, определяем где сработало событие,
-// если select или input, то вызываем событие click
+// Ловим нажатие клавишы Enter в форме у input features,
+// вызываем событие click, чтобы запустить фильтрацию
 formFilters.addEventListener('keydown', function (evt) {
-  // Опеределяем, где именно произошло событие
   let target = evt.target;
-  if (evt.key === 'Enter') {
-    if (target.tagName === 'INPUT') {
-      target.click();
-    }
-    if (target.tagName === 'SELECT') {
-      target.click();
-    }
+  if ((evt.key === 'Enter') && (target.tagName === 'INPUT')) {
+    target.click();
   }
 });
 

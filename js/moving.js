@@ -47,8 +47,8 @@ const buttonMouseDownHandler = function (evt) {
     // Если по вертикали снизу значение коорданаты Y больше 630 (с учетом вычета высоты метки), то перестаем изменять координату Y.
     const newOffsetLeft = Number(window.map.mapPin.offsetLeft - shift.x);
     const newOffsetTop = Number(window.map.mapPin.offsetTop - shift.y);
-    const minCoordinateX = 0;
-    const maxCoordinateX = document.querySelector('.map').clientWidth - window.data.WIDTH_PIN_MAIN;
+    const minCoordinateX = 0 - window.data.HALF_WIDTH_MAIN_PIN;
+    const maxCoordinateX = document.querySelector('.map').clientWidth - window.data.HALF_WIDTH_MAIN_PIN;
     const minCoordinateY = window.data.MIN_MAP_Y - window.data.HEIGHT_PIN_MAIN;
     const maxCoordinateY = window.data.MAX_MAP_Y - window.data.HEIGHT_PIN_MAIN;
     if ((newOffsetLeft >= minCoordinateX) && (newOffsetLeft <= maxCoordinateX)) {

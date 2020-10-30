@@ -6,7 +6,7 @@
 const pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
 // Функция отрисовки метки на карте
-const renderPin = function (realEstatePin) {
+const renderPin = (realEstatePin) => {
   const pinElement = pinTemplate.cloneNode(true);
   const pinPointerCoordinateX = Number(realEstatePin['location']['x']) - window.data.COORDINATE_PIN_X;
   const pinPointerCoordinateY = Number(realEstatePin['location']['y']) - window.data.COORDINATE_PIN_Y;
@@ -17,7 +17,7 @@ const renderPin = function (realEstatePin) {
 };
 
 // Функция отрисовки всех меток во фрагмент
-const renderPins = function (realEstatesPin) {
+const renderPins = (realEstatesPin) => {
   const fragment = document.createDocumentFragment();
 
   // По количество меток меньше значения константы, то отобразить только их, если больше, то ограничится значением константы

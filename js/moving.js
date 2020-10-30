@@ -5,7 +5,7 @@
 // В адрес записываются координаты острого конца метки. Его нужно вычислить.
 
 // Функция отображения координат метки
-const showCoordinatesMapPin = function (pin, drag) {
+const showCoordinatesMapPin = (pin, drag) => {
   // Если метка не двигалась, то записывает координаты ее центра
   let leftMapPin = pin.offsetLeft + window.data.HALF_WIDTH_MAIN_PIN;
   let topMapPin = pin.offsetTop + window.data.HALF_HEIGHT_MAIN_PIN;
@@ -18,7 +18,7 @@ const showCoordinatesMapPin = function (pin, drag) {
 };
 
 //  Функция обработка события drag-and-drop
-const buttonMouseDownHandler = function (evt) {
+const buttonMouseDownHandler = (evt) => {
   evt.preventDefault();
   // Начальные координаты во время нажатия на метку
   let startCoords = {
@@ -27,7 +27,7 @@ const buttonMouseDownHandler = function (evt) {
   };
   let dragged = false;
   // Обработка события move
-  const buttonMouseMoveHandler = function (moveEvt) {
+  const buttonMouseMoveHandler = (moveEvt) => {
     dragged = true;
     moveEvt.preventDefault();
     // Сохраняем разницу координат между начальной и текущей позицией метки
@@ -61,7 +61,7 @@ const buttonMouseDownHandler = function (evt) {
     window.form.adForm.querySelector('#address').setAttribute('value', showCoordinatesMapPin(window.map.mapPin, dragged));
   };
   // Обработка события mouseup
-  const buttonMouseUpHandler = function (upEvt) {
+  const buttonMouseUpHandler = (upEvt) => {
     upEvt.preventDefault();
 
     // Запись координат в форму объявления

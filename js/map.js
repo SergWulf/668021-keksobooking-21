@@ -7,14 +7,14 @@ const mapAdverts = document.querySelector('.map');
 const mapPin = document.querySelector('.map__pin--main');
 
 // Функция отображения меток
-const renderPinsJSON = function () {
+const renderPinsJSON = () => {
   // Находим блок, где будем отображать метки и отображаем их
   const blockPins = document.querySelector('.map__pins');
   blockPins.appendChild(window.pin.renderPins(window.data.filterRealEstates));
 };
 
 // Функция удаления меток
-const removePins = function () {
+const removePins = () => {
   // Находим и удаляем метки
   const pins = document.querySelectorAll('.map__pin:not(.map__pin--main');
   // Успешно скомуниздил со stackoverflow.com ))
@@ -22,27 +22,27 @@ const removePins = function () {
   // но как он их делает живыми, то есть как он связывается с node
   // В общем много чего не понял(prototype, call), но красивый код, всё работает,
   // почитаю сегодня подробней об этом ))))
-  Array.prototype.forEach.call(pins, function (node) {
+  Array.prototype.forEach.call(pins, (node) => {
     node.parentNode.removeChild(node);
   });
 };
 
-const getData = function (dataJSON) {
+const getData = (dataJSON) => {
   // Если в каком-то объекте отсутствует поле offer, то удаляем его,
   // также удаляем объекты без полей author и location
-  let dataWithOffer = dataJSON.filter(function (realEstate) {
+  let dataWithOffer = dataJSON.filter((realEstate) => {
     return realEstate['offer'] && realEstate['author'] && realEstate['location'];
   });
   window.data.realEstates = dataWithOffer;
   window.data.filterRealEstates = dataWithOffer;
   // Так как данные успешно получены, активируем форму фильтрации
-  window.filter.activationForm();
+  window.filter.activateForm();
   // Вызываем функцию отрисовки меток по JSON данным
   renderPinsJSON();
 };
 
 // Коллбэк функция успешной отправки данных формы.
-const messageError = function (message) {
+const getError = (message) => {
   const errorPopup = document.createElement('DIV');
   errorPopup.classList.add('error');
   const errorText = document.createElement('P');
@@ -54,12 +54,12 @@ const messageError = function (message) {
   document.querySelector('main').appendChild(errorPopup);
 
   // Обработчики закрытия окна
-  errorPopup.addEventListener('click', function () {
+  errorPopup.addEventListener('click', () => {
     // Удалить окно из разметки
     document.querySelector('main').removeChild(document.querySelector('main').lastChild);
   });
 
-  errorPopup.addEventListener('keydown', function (evt) {
+  errorPopup.addEventListener('keydown', (evt) => {
     if (evt.key === 'Escape') {
       // Удалить окно из разметки
       document.querySelector('main').removeChild(document.querySelector('main').lastChild);
@@ -69,30 +69,30 @@ const messageError = function (message) {
 
 // Функция активации: рисуются метки, активируется карта
 // форма.
-const activationPage = function () {
+const activatePage = () => {
   mapAdverts.classList.remove('map--faded');
   window.form.adForm.classList.remove('ad-form--disabled');
   for (let i = 0; i < window.form.adForm.children.length; i++) {
     window.form.adForm.children[i].removeAttribute('disabled');
   }
   // Загружаем JSON данные после активации
-  window.load.loadData(getData, messageError, 'GET', window.data.URL_DOWNLOAD);
+  window.load.loadData(getData, getError, 'GET', window.data.URL_DOWNLOAD);
 };
 
 // Обработчики событий: активируют страницу кексобукинга
 // по нажатию левой кнопки мыши или клавиши Enter(когда метка в фокусе)
-const buttonMouseDownHandler = function (evt) {
+const buttonMouseDownHandler = (evt) => {
   if (evt.button === 0) {
-    activationPage();
+    activatePage();
     // Удаляем обработчики
     mapPin.removeEventListener('mousedown', buttonMouseDownHandler);
     mapPin.removeEventListener('keydown', buttonKeyDownHandler);
   }
 };
 
-const buttonKeyDownHandler = function (evt) {
+const buttonKeyDownHandler = (evt) => {
   if (evt.key === 'Enter') {
-    activationPage();
+    activatePage();
     // Удаляем обработчики
     mapPin.removeEventListener('mousedown', buttonMouseDownHandler);
     mapPin.removeEventListener('keydown', buttonKeyDownHandler);
@@ -105,7 +105,7 @@ mapPin.addEventListener('mousedown', buttonMouseDownHandler);
 
 // Функция деактивации: удаляются метки, деактивируется карта
 // блокируются фильтры, форма.
-const deactivationPage = function () {
+const deactivatePage = () => {
   mapAdverts.classList.add('map--faded');
   window.form.adForm.reset();
   window.form.adForm.classList.add('ad-form--disabled');
@@ -139,10 +139,10 @@ const deactivationPage = function () {
   mapPin.addEventListener('mousedown', buttonMouseDownHandler);
 };
 
-deactivationPage();
+deactivatePage();
 
 // Обработчик события клика мыши на метке для отображения карточки объявления
-mapAdverts.addEventListener('click', function (evt) {
+mapAdverts.addEventListener('click', (evt) => {
   // Опеределяем, где именно произошло событие
   let target = evt.target;
   // Если на изображении метки, то присваем его предку (button)(самой метке)
@@ -171,7 +171,7 @@ mapAdverts.addEventListener('click', function (evt) {
 });
 
 // Вешаем обработчик, который перехватывает нажатие клавиши ESC на всей карте.
-mapAdverts.addEventListener('keydown', function (evt) {
+mapAdverts.addEventListener('keydown', (evt) => {
   if ((mapAdverts.querySelector('.map__card')) && (evt.key === 'Escape')) {
     mapAdverts.querySelector('.map__card').classList.add('hidden');
   }
@@ -181,7 +181,7 @@ mapAdverts.addEventListener('keydown', function (evt) {
 window.map = {
   mapAdverts: mapAdverts,
   mapPin: mapPin,
-  deactivationPage: deactivationPage,
+  deactivatePage: deactivatePage,
   removePins: removePins,
   renderPinsJSON: renderPinsJSON
 };

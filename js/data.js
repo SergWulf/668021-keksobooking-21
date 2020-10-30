@@ -55,7 +55,6 @@ const COUNT_SHOW_PINS = 5;
 let realEstates = [];
 // Массив отфильтрованных данных
 let filterRealEstates = [];
-let errorsJSON = '';
 // Количество отображаемых меток на карте
 let currentCountShowPins = COUNT_SHOW_PINS;
 
@@ -80,7 +79,6 @@ window.data = {
   filterRealEstates: filterRealEstates,
   COUNT_SHOW_PINS: COUNT_SHOW_PINS,
   currentCountShowPins: currentCountShowPins,
-  errorsJSON: errorsJSON,
   URL_UPLOAD: URL_UPLOAD,
   URL_DOWNLOAD: URL_DOWNLOAD,
   FILTER_TYPE: FILTER_TYPE,

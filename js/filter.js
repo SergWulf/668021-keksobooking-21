@@ -9,7 +9,7 @@
 const formFilters = document.querySelector('.map__filters');
 
 // Функция фильтрации массива
-const filtrationRealEstates = function () {
+const filterRealEstates = () => {
   // Проверяем, есть ли карточка объявления, если есть и она не скрыта, то скрываем её
   if (window.map.mapAdverts.querySelector('.map__card')) {
     if (!window.map.mapAdverts.querySelector('.map__card').classList.contains('hidden')) {
@@ -34,7 +34,7 @@ const filtrationRealEstates = function () {
   }
 
   // Функция проверки по цене, если у объекта недвижимости и фильтра по цене данные совпадают, то вернут true
-  const isPrice = function (realEstatePrice) {
+  const isPrice = (realEstatePrice) => {
     // Булева переменная, если true, то подходит объект недвижимости по значению цены
     let priceFilter = false;
 
@@ -52,7 +52,7 @@ const filtrationRealEstates = function () {
     return priceFilter || (valuesFormFilters.get('price') === 'any');
   };
 
-  const isFeatures = function (realEstateFeatures) {
+  const isFeatures = (realEstateFeatures) => {
     // Булева переменная, если true, то подходит объект нидвижимости по значению цены
     let featuresFilter = true;
     // Проверяем, выбраны ли фильтры features в форме и есть ли фильтры features в объявлении
@@ -75,20 +75,20 @@ const filtrationRealEstates = function () {
     return featuresFilter;
   };
 
-  const isHousingType = function (realEstateType) {
+  const isHousingType = (realEstateType) => {
     return realEstateType === valuesFormFilters.get('type') || valuesFormFilters.get('type') === 'any';
   };
 
-  const isHousingRooms = function (realEstateRooms) {
+  const isHousingRooms = (realEstateRooms) => {
     return realEstateRooms === Number(valuesFormFilters.get('rooms')) || valuesFormFilters.get('rooms') === 'any';
   };
 
-  const isHousingGuests = function (realEstateGuests) {
+  const isHousingGuests = (realEstateGuests) => {
     return realEstateGuests === Number(valuesFormFilters.get('guests')) || valuesFormFilters.get('guests') === 'any';
   };
 
   // Используем встроенную функцию фильтрации, получаем новый массив соответсвующий выбранным фильтрам
-  window.data.filterRealEstates = window.data.realEstates.filter(function (realEstate) {
+  window.data.filterRealEstates = window.data.realEstates.filter((realEstate) => {
     return isHousingType(realEstate['offer']['type']) &&
       isPrice(realEstate['offer']['price']) &&
       isHousingRooms(realEstate['offer']['rooms']) &&
@@ -100,11 +100,31 @@ const filtrationRealEstates = function () {
 };
 
 // На каждое изменение формы фильтрации вызываем функцию фильтрации
-formFilters.addEventListener('change', function () {
-  window.debounce(filtrationRealEstates);
+formFilters.addEventListener('change', () => {
+  window.debounce(filterRealEstates);
 });
+
+
+// Ловим нажатие клавишы Enter в форме у input features,
+// вызываем событие click, чтобы запустить фильтрацию
+formFilters.addEventListener('keydown', (evt) => {
+  let target = evt.target;
+  if ((evt.key === 'Enter') && (target.tagName === 'INPUT')) {
+    target.click();
+  }
+});
+
+
+// Активация полей формы с фильтрами
+const activateForm = () => {
+  formFilters.classList.remove('ad-form--disabled');
+  for (let i = 0; i < formFilters.children.length; i++) {
+    formFilters.children[i].removeAttribute('disabled');
+  }
+};
 
 // Экспорт данных
 window.filter = {
-  formFilters: formFilters
+  formFilters: formFilters,
+  activateForm: activateForm
 };

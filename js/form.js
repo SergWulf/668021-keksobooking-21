@@ -22,7 +22,7 @@ const capacityForm = document.querySelector('#capacity');
 
 
 // Функция ограничений для полей ввода формы объявлений, до валидации формы
-const createAttributesForm = function () {
+const createAttributesForm = () => {
 
   // 0. Найти форму в DOM, установить ей атрибут action = "https://javascript.pages.academy/keksobooking"
   adForm.setAttribute('action', 'https://javascript.pages.academy/keksobooking');
@@ -60,7 +60,7 @@ priceForm.setAttribute('placeholder', window.data.TYPE_RESIDENCE_PRICE[typeOfHou
 
 
 // Вешаем обработчик на изменение типа жилья
-typeOfHouseForm.addEventListener('change', function (evt) {
+typeOfHouseForm.addEventListener('change', (evt) => {
   priceForm.setAttribute('min', window.data.TYPE_RESIDENCE_PRICE[typeOfHouseForm.options[evt.currentTarget.selectedIndex].value]);
   priceForm.setAttribute('placeholder', window.data.TYPE_RESIDENCE_PRICE[typeOfHouseForm.options[evt.currentTarget.selectedIndex].value]);
 });
@@ -73,7 +73,7 @@ typeOfHouseForm.addEventListener('change', function (evt) {
 // 1. Обработка события на каждом поле
 // 2. Если одно поле принимает определенное значение, то и другое поле, послы выбора значения, принимает тоже значение
 
-const validationTime = function (evt) {
+const validateTime = (evt) => {
   if (evt.currentTarget.name === 'timeout') {
     timeInForm.options.selectedIndex = timeOutForm.options.selectedIndex;
   } else {
@@ -81,10 +81,10 @@ const validationTime = function (evt) {
   }
 };
 
-timeInForm.addEventListener('change', validationTime);
-timeOutForm.addEventListener('change', validationTime);
+timeInForm.addEventListener('change', validateTime);
+timeOutForm.addEventListener('change', validateTime);
 
-const validationGuestsInRoom = function (evt) {
+const validateGuestsInRoom = (evt) => {
   // Сразу записываем сообщения об несоответствии комнат и гостей, в дальнейшем эти значения примут истинные значения
   roomNumberForm.setCustomValidity(MESSAGE_ERROR_VALIDATION);
   capacityForm.setCustomValidity(MESSAGE_ERROR_VALIDATION);
@@ -116,9 +116,9 @@ const validationGuestsInRoom = function (evt) {
   }
 };
 
-validationGuestsInRoom(false);
-roomNumberForm.addEventListener('change', validationGuestsInRoom);
-capacityForm.addEventListener('change', validationGuestsInRoom);
+validateGuestsInRoom(false);
+roomNumberForm.addEventListener('change', validateGuestsInRoom);
+capacityForm.addEventListener('change', validateGuestsInRoom);
 
 // Обработчик формы
 // 1. Перехватить стандартную отправку формы.
@@ -131,8 +131,8 @@ capacityForm.addEventListener('change', validationGuestsInRoom);
 //     Сообщение должно исчезать по нажатию на кнопку .error__button, Esc и по любому клику за пределами сообщения.
 
 // Коллбэк функция успешной отправки данных формы.
-const successForm = function () {
-  window.map.deactivationPage();
+const getSuccessForm = () => {
+  window.map.deactivatePage();
   // Найти template Success и отобразить его, повесить обработчик на закрытие
   const templateSuccess = document.querySelector('#success').content.querySelector('.success');
   const successPopup = templateSuccess.cloneNode(true);
@@ -141,12 +141,12 @@ const successForm = function () {
   successPopup.focus();
 
   // Обработчики закрытия окна
-  successPopup.addEventListener('click', function () {
+  successPopup.addEventListener('click', () => {
     // Удалить окно из разметки
     document.querySelector('main').removeChild(document.querySelector('main').lastChild);
   });
 
-  successPopup.addEventListener('keydown', function (evt) {
+  successPopup.addEventListener('keydown', (evt) => {
     if (evt.key === 'Escape') {
       // Удалить окно из разметки
       document.querySelector('main').removeChild(document.querySelector('main').lastChild);
@@ -155,7 +155,7 @@ const successForm = function () {
 };
 
 // Коллбэк функция, если возникла ошибка в отправке данных
-const errorForm = function (message) {
+const getError = (message) => {
   // Найти template Error и отобразить его, повесить обработчик на закрытие
   const templateError = document.querySelector('#error').content.querySelector('.error');
   const errorPopup = templateError.cloneNode(true);
@@ -165,39 +165,39 @@ const errorForm = function (message) {
   errorPopup.focus();
   // Обработчики закрытия окна
 
-  errorPopup.addEventListener('keydown', function (evt) {
+  errorPopup.addEventListener('keydown', (evt) => {
     if (evt.key === 'Escape') {
       // Удалить окно из разметки
       document.querySelector('main').removeChild(document.querySelector('main').lastChild);
     }
   });
 
-  errorPopup.addEventListener('click', function () {
+  errorPopup.addEventListener('click', () => {
     // Удалить окно из разметки
     document.querySelector('main').removeChild(document.querySelector('main').lastChild);
   });
 
-  errorPopup.querySelector('.error__button').addEventListener('click', function () {
+  errorPopup.querySelector('.error__button').addEventListener('click', () => {
     // Удалить окно из разметки
     document.querySelector('main').removeChild(document.querySelector('main').lastChild);
   });
 };
 
-adForm.addEventListener('submit', function (evt) {
+adForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
   // Получаем данные с формы.
   let dataForm = new FormData(adForm);
   // Вызываем функцию отправки формы
-  window.load.loadData(successForm, errorForm, 'POST', window.data.URL_UPLOAD, dataForm);
+  window.load.loadData(getSuccessForm, getError, 'POST', window.data.URL_UPLOAD, dataForm);
 });
 
 
 // Обработчик кнопки сброса формы,
 const buttonFormReset = document.querySelector('.ad-form__reset');
-const buttonResetClickHandler = function (evtReset) {
+const buttonResetClickHandler = (evtReset) => {
   evtReset.preventDefault();
   // Деактивируем главную страницу и сбрасываем форму
-  window.map.deactivationPage();
+  window.map.deactivatePage();
 };
 
 buttonFormReset.addEventListener('click', buttonResetClickHandler);
@@ -206,11 +206,11 @@ buttonFormReset.addEventListener('click', buttonResetClickHandler);
 const fileChooserAvatar = document.querySelector('.ad-form-header__upload input[type=file]');
 const previewAvatar = document.querySelector('.ad-form-header__preview img');
 
-fileChooserAvatar.addEventListener('change', function () {
+fileChooserAvatar.addEventListener('change', () => {
   const file = fileChooserAvatar.files[0];
   const reader = new FileReader();
 
-  reader.addEventListener('load', function () {
+  reader.addEventListener('load', () => {
     previewAvatar.src = reader.result;
   });
 
@@ -230,11 +230,11 @@ previewRealEstatePicture.width = 40;
 previewRealEstatePicture.height = 44;
 previewBlockRealEstate.appendChild(previewRealEstatePicture);
 
-fileChooserRealEstatePicture.addEventListener('change', function () {
+fileChooserRealEstatePicture.addEventListener('change', () => {
   const file = fileChooserRealEstatePicture.files[0];
   const reader = new FileReader();
 
-  reader.addEventListener('load', function () {
+  reader.addEventListener('load', () => {
     previewRealEstatePicture.src = reader.result;
   });
 

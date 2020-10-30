@@ -6,7 +6,7 @@ const DEBOUNCE_INTERVAL = 500;
 let lastTimeout = null;
 
 // Передается функция коллбэк, которую нужно вызвать с задержкой.
-window.debounce = function (cb) {
+window.debounce = (cb) => {
   if (lastTimeout) {
     window.clearTimeout(lastTimeout);
   }

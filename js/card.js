@@ -7,7 +7,7 @@
 const cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 
 // Функция отображения карточки, если данных для заполнения блока не хватает, то блок скрывается
-const renderCard = function (realEstateCard) {
+const renderCard = (realEstateCard) => {
   const cardElement = cardTemplate.cloneNode(true);
   if (realEstateCard['offer']['title']) {
     cardElement.querySelector('.popup__title').textContent = realEstateCard['offer']['title'];
@@ -46,7 +46,7 @@ const renderCard = function (realEstateCard) {
   while (popupFeatures.firstChild) {
     popupFeatures.removeChild(popupFeatures.firstChild);
   }
-  if (realEstateCard['offer']['features'].length !== 0) {
+  if (realEstateCard['offer']['features'] && (realEstateCard['offer']['features'].length !== 0)) {
     // Добавляем нужные услуги в разметку
     for (let i = 0; i < realEstateCard['offer']['features'].length; i++) {
       const elementFeature = document.createElement('li');
@@ -65,7 +65,7 @@ const renderCard = function (realEstateCard) {
   // Добавляем фотографии в карточку объекта недвижимости
   const popupPhotos = cardElement.querySelector('.popup__photos');
 
-  if (realEstateCard['offer']['photos'].length > 0) {
+  if (realEstateCard['offer']['photos'] && (realEstateCard['offer']['photos'].length > 0)) {
     for (let i = 0; i < realEstateCard['offer']['photos'].length; i++) {
       const popupPhoto = popupPhotos.querySelector('img').cloneNode(true);
       popupPhoto.src = realEstateCard['offer']['photos'][i];
@@ -87,7 +87,7 @@ const renderCard = function (realEstateCard) {
   // Находим кнопку-крестик в окне отображения карточки
   const closePopup = cardElement.querySelector('.popup__close');
   // Вешаем обработчик, в котором по клику скрываем блок карточки
-  closePopup.addEventListener('click', function () {
+  closePopup.addEventListener('click', () => {
     cardElement.classList.add('hidden');
   });
 

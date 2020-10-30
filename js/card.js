@@ -46,7 +46,7 @@ const renderCard = function (realEstateCard) {
   while (popupFeatures.firstChild) {
     popupFeatures.removeChild(popupFeatures.firstChild);
   }
-  if (realEstateCard['offer']['features'].length !== 0) {
+  if (realEstateCard['offer']['features'] && (realEstateCard['offer']['features'].length !== 0)) {
     // Добавляем нужные услуги в разметку
     for (let i = 0; i < realEstateCard['offer']['features'].length; i++) {
       const elementFeature = document.createElement('li');
@@ -65,7 +65,7 @@ const renderCard = function (realEstateCard) {
   // Добавляем фотографии в карточку объекта недвижимости
   const popupPhotos = cardElement.querySelector('.popup__photos');
 
-  if (realEstateCard['offer']['photos'].length > 0) {
+  if (realEstateCard['offer']['photos'] && (realEstateCard['offer']['photos'].length > 0)) {
     for (let i = 0; i < realEstateCard['offer']['photos'].length; i++) {
       const popupPhoto = popupPhotos.querySelector('img').cloneNode(true);
       popupPhoto.src = realEstateCard['offer']['photos'][i];

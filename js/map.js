@@ -28,7 +28,7 @@ const removePins = function () {
 };
 
 const getData = function (dataJSON) {
-  // Если в каком-то объекте отсутствует поле offer, то удаляем его
+  // Если в каком-то объекте отсутствует поле offer, то удаляем его,
   // также удаляем объекты без полей author и location
   let dataWithOffer = dataJSON.filter(function (realEstate) {
     return realEstate['offer'] && realEstate['author'] && realEstate['location'];

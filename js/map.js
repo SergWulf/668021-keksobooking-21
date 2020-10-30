@@ -27,17 +27,44 @@ const removePins = function () {
   });
 };
 
-const outError = function (message) {
-  window.data.errorsJSON = message;
-};
-
 const getData = function (dataJSON) {
-  window.data.realEstates = dataJSON;
-  window.data.filterRealEstates = dataJSON;
+  // Если в каком-то объекте отсутствует поле offer, то удаляем его
+  // также удаляем объекты без полей author и location
+  let dataWithOffer = dataJSON.filter(function (realEstate) {
+    return realEstate['offer'] && realEstate['author'] && realEstate['location'];
+  });
+  window.data.realEstates = dataWithOffer;
+  window.data.filterRealEstates = dataWithOffer;
   // Так как данные успешно получены, активируем форму фильтрации
   window.filter.activationForm();
   // Вызываем функцию отрисовки меток по JSON данным
   renderPinsJSON();
+};
+
+// Коллбэк функция успешной отправки данных формы.
+const messageError = function (message) {
+  const errorPopup = document.createElement('DIV');
+  errorPopup.classList.add('error');
+  const errorText = document.createElement('P');
+  errorText.classList.add('error__message');
+  errorText.textContent = message;
+  errorPopup.appendChild(errorText);
+  errorPopup.setAttribute('tabindex', '0');
+  errorPopup.focus();
+  document.querySelector('main').appendChild(errorPopup);
+
+  // Обработчики закрытия окна
+  errorPopup.addEventListener('click', function () {
+    // Удалить окно из разметки
+    document.querySelector('main').removeChild(document.querySelector('main').lastChild);
+  });
+
+  errorPopup.addEventListener('keydown', function (evt) {
+    if (evt.key === 'Escape') {
+      // Удалить окно из разметки
+      document.querySelector('main').removeChild(document.querySelector('main').lastChild);
+    }
+  });
 };
 
 // Функция активации: рисуются метки, активируется карта
@@ -49,7 +76,7 @@ const activationPage = function () {
     window.form.adForm.children[i].removeAttribute('disabled');
   }
   // Загружаем JSON данные после активации
-  window.load.loadData(getData, outError, 'GET', window.data.URL_DOWNLOAD);
+  window.load.loadData(getData, messageError, 'GET', window.data.URL_DOWNLOAD);
 };
 
 // Обработчики событий: активируют страницу кексобукинга

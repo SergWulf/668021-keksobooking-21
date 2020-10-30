@@ -155,7 +155,7 @@ const successForm = function () {
 };
 
 // Коллбэк функция, если возникла ошибка в отправке данных
-const errorForm = function (message) {
+const outError = function (message) {
   // Найти template Error и отобразить его, повесить обработчик на закрытие
   const templateError = document.querySelector('#error').content.querySelector('.error');
   const errorPopup = templateError.cloneNode(true);
@@ -188,7 +188,7 @@ adForm.addEventListener('submit', function (evt) {
   // Получаем данные с формы.
   let dataForm = new FormData(adForm);
   // Вызываем функцию отправки формы
-  window.load.loadData(successForm, errorForm, 'POST', window.data.URL_UPLOAD, dataForm);
+  window.load.loadData(successForm, outError, 'POST', window.data.URL_UPLOAD, dataForm);
 });
 
 

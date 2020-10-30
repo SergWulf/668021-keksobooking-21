@@ -37,5 +37,5 @@ const loadData = function (onSuccess, onError, method, URL, data = undefined) {
 };
 
 window.load = {
-  loadData: loadData
+  loadData: loadData,
 };

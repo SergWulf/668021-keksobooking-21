@@ -45,32 +45,32 @@ const buttonMouseDownHandler = (evt) => {
     // Если по горизонтали вправо значение координаты Х равно или больше размера блока карты с учётом вычета ширины метки, то перестаем изменять координату X
     // Если по вертикали сверху значение координаты Y равно или меньше 130, то перестаем изменять координату Y
     // Если по вертикали снизу значение коорданаты Y больше 630 (с учетом вычета высоты метки), то перестаем изменять координату Y.
-    const newOffsetLeft = Number(window.map.mapPin.offsetLeft - shift.x);
-    const newOffsetTop = Number(window.map.mapPin.offsetTop - shift.y);
+    const newOffsetLeft = Number(window.map.pin.offsetLeft - shift.x);
+    const newOffsetTop = Number(window.map.pin.offsetTop - shift.y);
     const minCoordinateX = 0 - window.data.HALF_WIDTH_MAIN_PIN;
-    const maxCoordinateX = document.querySelector('.map').clientWidth - window.data.HALF_WIDTH_MAIN_PIN;
+    const maxCoordinateX = document.querySelector(`.map`).clientWidth - window.data.HALF_WIDTH_MAIN_PIN;
     const minCoordinateY = window.data.MIN_MAP_Y - window.data.HEIGHT_PIN_MAIN;
     const maxCoordinateY = window.data.MAX_MAP_Y - window.data.HEIGHT_PIN_MAIN;
     if ((newOffsetLeft >= minCoordinateX) && (newOffsetLeft <= maxCoordinateX)) {
-      window.map.mapPin.style.left = `${window.map.mapPin.offsetLeft - shift.x}px`;
+      window.map.pin.style.left = `${window.map.pin.offsetLeft - shift.x}px`;
     }
     if (((newOffsetTop >= minCoordinateY)) && (newOffsetTop <= maxCoordinateY)) {
-      window.map.mapPin.style.top = `${window.map.mapPin.offsetTop - shift.y}px`;
+      window.map.pin.style.top = `${window.map.pin.offsetTop - shift.y}px`;
     }
     // Запись координат в форму объявления
-    window.form.adForm.querySelector('#address').setAttribute('value', showCoordinatesMapPin(window.map.mapPin, dragged));
+    window.form.advert.querySelector(`#address`).setAttribute(`value`, showCoordinatesMapPin(window.map.pin, dragged));
   };
   // Обработка события mouseup
   const buttonMouseUpHandler = (upEvt) => {
     upEvt.preventDefault();
 
     // Запись координат в форму объявления
-    window.form.adForm.querySelector('#address').setAttribute('value', showCoordinatesMapPin(window.map.mapPin, dragged));
-    document.removeEventListener('mousemove', buttonMouseMoveHandler);
-    document.removeEventListener('mouseup', buttonMouseUpHandler);
+    window.form.advert.querySelector(`#address`).setAttribute(`value`, showCoordinatesMapPin(window.map.pin, dragged));
+    document.removeEventListener(`mousemove`, buttonMouseMoveHandler);
+    document.removeEventListener(`mouseup`, buttonMouseUpHandler);
   };
-  document.addEventListener('mousemove', buttonMouseMoveHandler);
-  document.addEventListener('mouseup', buttonMouseUpHandler);
+  document.addEventListener(`mousemove`, buttonMouseMoveHandler);
+  document.addEventListener(`mouseup`, buttonMouseUpHandler);
 };
 
-window.map.mapPin.addEventListener('mousedown', buttonMouseDownHandler);
+window.map.pin.addEventListener(`mousedown`, buttonMouseDownHandler);

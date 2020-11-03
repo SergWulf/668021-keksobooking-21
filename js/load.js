@@ -4,11 +4,11 @@
 // 1. Сделать запрос на получение JSON данных с сервера
 // 2. Проверить, что запрос выполнился успешно, если нет, то обработать все исключения
 
-const loadData = (onSuccess, onError, method, URL, data = undefined) => {
+const onData = (onSuccess, onError, method, URL, data = undefined) => {
   const xhr = new XMLHttpRequest();
 
-  xhr.addEventListener('load', () => {
-    let error = '';
+  xhr.addEventListener(`load`, () => {
+    let error = ``;
     switch (xhr.status) {
       case 200:
         onSuccess(xhr.response);
@@ -21,15 +21,15 @@ const loadData = (onSuccess, onError, method, URL, data = undefined) => {
     }
   });
 
-  xhr.addEventListener('error', () => {
-    onError('Произошла ошибка соединения');
+  xhr.addEventListener(`error`, () => {
+    onError(`Произошла ошибка соединения`);
   });
 
-  xhr.addEventListener('timeout', () => {
-    onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
+  xhr.addEventListener(`timeout`, () => {
+    onError(`Запрос не успел выполниться за ` + xhr.timeout + `мс`);
   });
 
-  xhr.responseType = 'json';
+  xhr.responseType = `json`;
   xhr.timeout = 20000; // 20s
 
   xhr.open(method, URL);
@@ -37,5 +37,5 @@ const loadData = (onSuccess, onError, method, URL, data = undefined) => {
 };
 
 window.load = {
-  loadData: loadData,
+  onData
 };

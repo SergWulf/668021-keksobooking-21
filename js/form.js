@@ -4,44 +4,44 @@
 // Константы для соответствия комнат к гостям и наоборот
 const MAX_ROOMS = 100;
 const MAX_GUESTS = 0;
-const MESSAGE_ERROR_VALIDATION = 'Количество гостей не соответствует количеству комнат: 1 комната - 1 гость, 2 комнаты - 1 или 2 гостя, 3 комнаты - 1, 2 или 3 гостя, 100 комнат - не для гостей';
+const MESSAGE_ERROR_VALIDATION = `Количество гостей не соответствует количеству комнат: 1 комната - 1 гость, 2 комнаты - 1 или 2 гостя, 3 комнаты - 1, 2 или 3 гостя, 100 комнат - не для гостей`;
 
 // Элементы формы DOM
-const adForm = document.querySelector('.ad-form');
-const titleForm = document.querySelector('#title');
-const priceForm = document.querySelector('#price');
-const addressForm = document.querySelector('#address');
-const typeOfHouseForm = document.querySelector('#type');
-const timeInForm = document.querySelector('#timein');
-const timeOutForm = document.querySelector('#timeout');
-const avatarForm = document.querySelector('#avatar');
-const imagesForm = document.querySelector('#images');
+const advert = document.querySelector(`.ad-form`);
+const titleForm = document.querySelector(`#title`);
+const priceForm = document.querySelector(`#price`);
+const addressForm = document.querySelector(`#address`);
+const typeOfHouseForm = document.querySelector(`#type`);
+const timeInForm = document.querySelector(`#timein`);
+const timeOutForm = document.querySelector(`#timeout`);
+const avatarForm = document.querySelector(`#avatar`);
+const imagesForm = document.querySelector(`#images`);
 
-const roomNumberForm = document.querySelector('#room_number');
-const capacityForm = document.querySelector('#capacity');
+const roomNumberForm = document.querySelector(`#room_number`);
+const capacityForm = document.querySelector(`#capacity`);
 
 
 // Функция ограничений для полей ввода формы объявлений, до валидации формы
 const createAttributesForm = () => {
 
   // 0. Найти форму в DOM, установить ей атрибут action = "https://javascript.pages.academy/keksobooking"
-  adForm.setAttribute('action', 'https://javascript.pages.academy/keksobooking');
+  advert.setAttribute(`action`, `https://javascript.pages.academy/keksobooking`);
 
   // 1. Найти заголовок объявления в разметке, установить для него атрибуты: обязательное текстовое, минимальное длина 30 сим, максимальная 100 символов.
-  titleForm.setAttribute('required', 'required');
-  titleForm.setAttribute('minlength', '30');
-  titleForm.setAttribute('maxlength', '100');
+  titleForm.setAttribute(`required`, `required`);
+  titleForm.setAttribute(`minlength`, `30`);
+  titleForm.setAttribute(`maxlength`, `100`);
 
   // 2. Цена за ночь. Обязательное числовое поле. Максимальное значение 1 000 000.
-  priceForm.setAttribute('required', 'required');
-  priceForm.setAttribute('max', '1000000');
+  priceForm.setAttribute(`required`, `required`);
+  priceForm.setAttribute(`max`, `1000000`);
 
   // 3. Адрес, обязательное поле, недоступно для редактирования
-  addressForm.setAttribute('readonly', 'readonly');
+  addressForm.setAttribute(`readonly`, `readonly`);
 
   // 4. Ограничение на тип загружаемых файлов, они могут быть только изображениями
-  avatarForm.setAttribute('accept', 'image/*');
-  imagesForm.setAttribute('accept', 'image/*');
+  avatarForm.setAttribute(`accept`, `image/*`);
+  imagesForm.setAttribute(`accept`, `image/*`);
 };
 
 createAttributesForm();
@@ -55,14 +55,14 @@ createAttributesForm();
 // Вместе с минимальным значением цены нужно изменять и плейсхолдер.
 
 // Обработка первоначального значения формы
-priceForm.setAttribute('min', window.data.TYPE_RESIDENCE_PRICE[typeOfHouseForm.options[typeOfHouseForm.selectedIndex].value]);
-priceForm.setAttribute('placeholder', window.data.TYPE_RESIDENCE_PRICE[typeOfHouseForm.options[typeOfHouseForm.selectedIndex].value]);
+priceForm.setAttribute(`min`, window.data.TYPE_RESIDENCE_PRICE[typeOfHouseForm.options[typeOfHouseForm.selectedIndex].value]);
+priceForm.setAttribute(`placeholder`, window.data.TYPE_RESIDENCE_PRICE[typeOfHouseForm.options[typeOfHouseForm.selectedIndex].value]);
 
 
 // Вешаем обработчик на изменение типа жилья
-typeOfHouseForm.addEventListener('change', (evt) => {
-  priceForm.setAttribute('min', window.data.TYPE_RESIDENCE_PRICE[typeOfHouseForm.options[evt.currentTarget.selectedIndex].value]);
-  priceForm.setAttribute('placeholder', window.data.TYPE_RESIDENCE_PRICE[typeOfHouseForm.options[evt.currentTarget.selectedIndex].value]);
+typeOfHouseForm.addEventListener(`change`, (evt) => {
+  priceForm.setAttribute(`min`, window.data.TYPE_RESIDENCE_PRICE[typeOfHouseForm.options[evt.currentTarget.selectedIndex].value]);
+  priceForm.setAttribute(`placeholder`, window.data.TYPE_RESIDENCE_PRICE[typeOfHouseForm.options[evt.currentTarget.selectedIndex].value]);
 });
 
 // Валидация полей заезды и выезда
@@ -74,15 +74,15 @@ typeOfHouseForm.addEventListener('change', (evt) => {
 // 2. Если одно поле принимает определенное значение, то и другое поле, послы выбора значения, принимает тоже значение
 
 const validateTime = (evt) => {
-  if (evt.currentTarget.name === 'timeout') {
+  if (evt.currentTarget.name === `timeout`) {
     timeInForm.options.selectedIndex = timeOutForm.options.selectedIndex;
   } else {
     timeOutForm.options.selectedIndex = timeInForm.options.selectedIndex;
   }
 };
 
-timeInForm.addEventListener('change', validateTime);
-timeOutForm.addEventListener('change', validateTime);
+timeInForm.addEventListener(`change`, validateTime);
+timeOutForm.addEventListener(`change`, validateTime);
 
 const validateGuestsInRoom = (evt) => {
   // Сразу записываем сообщения об несоответствии комнат и гостей, в дальнейшем эти значения примут истинные значения
@@ -103,7 +103,7 @@ const validateGuestsInRoom = (evt) => {
   let currentExpressionCondition = (roomNumberForm.options[roomNumberForm.selectedIndex].value >= capacityForm.options[capacityForm.selectedIndex].value);
 
   // Если меняется значение гостей, то меняетс условие соответствия гостей комнат
-  if ((Boolean(evt)) && (evt.currentTarget.name === 'capacity')) {
+  if ((Boolean(evt)) && (evt.currentTarget.name === `capacity`)) {
     currentExpressionCondition = (capacityForm.options[capacityForm.selectedIndex].value <= roomNumberForm.options[roomNumberForm.selectedIndex].value);
   }
 
@@ -111,14 +111,14 @@ const validateGuestsInRoom = (evt) => {
   // Если комнаты соответствуют гостям и поля не содержать максимальных значений,
   // или есть максимальные значения, но они в обоих полях, то всё валидно, иначе выводим сообщение!
   if ((expressionWithoutMaxValue && currentExpressionCondition) || (expressionWithMaxValue)) {
-    roomNumberForm.setCustomValidity('');
-    capacityForm.setCustomValidity('');
+    roomNumberForm.setCustomValidity(``);
+    capacityForm.setCustomValidity(``);
   }
 };
 
 validateGuestsInRoom(false);
-roomNumberForm.addEventListener('change', validateGuestsInRoom);
-capacityForm.addEventListener('change', validateGuestsInRoom);
+roomNumberForm.addEventListener(`change`, validateGuestsInRoom);
+capacityForm.addEventListener(`change`, validateGuestsInRoom);
 
 // Обработчик формы
 // 1. Перехватить стандартную отправку формы.
@@ -134,22 +134,22 @@ capacityForm.addEventListener('change', validateGuestsInRoom);
 const getSuccessForm = () => {
   window.map.deactivatePage();
   // Найти template Success и отобразить его, повесить обработчик на закрытие
-  const templateSuccess = document.querySelector('#success').content.querySelector('.success');
+  const templateSuccess = document.querySelector(`#success`).content.querySelector(`.success`);
   const successPopup = templateSuccess.cloneNode(true);
-  document.querySelector('main').appendChild(successPopup);
-  successPopup.setAttribute('tabindex', '0');
+  document.querySelector(`main`).appendChild(successPopup);
+  successPopup.setAttribute(`tabindex`, `0`);
   successPopup.focus();
 
   // Обработчики закрытия окна
-  successPopup.addEventListener('click', () => {
+  successPopup.addEventListener(`click`, () => {
     // Удалить окно из разметки
-    document.querySelector('main').removeChild(document.querySelector('main').lastChild);
+    document.querySelector(`main`).removeChild(document.querySelector(`main`).lastChild);
   });
 
-  successPopup.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
+  successPopup.addEventListener(`keydown`, (evt) => {
+    if (evt.key === `Escape`) {
       // Удалить окно из разметки
-      document.querySelector('main').removeChild(document.querySelector('main').lastChild);
+      document.querySelector(`main`).removeChild(document.querySelector(`main`).lastChild);
     }
   });
 };
@@ -157,84 +157,84 @@ const getSuccessForm = () => {
 // Коллбэк функция, если возникла ошибка в отправке данных
 const getError = (message) => {
   // Найти template Error и отобразить его, повесить обработчик на закрытие
-  const templateError = document.querySelector('#error').content.querySelector('.error');
+  const templateError = document.querySelector(`#error`).content.querySelector(`.error`);
   const errorPopup = templateError.cloneNode(true);
-  errorPopup.querySelector('p').textContent = message;
-  document.querySelector('main').appendChild(errorPopup);
-  errorPopup.setAttribute('tabindex', '0');
+  errorPopup.querySelector(`p`).textContent = message;
+  document.querySelector(`main`).appendChild(errorPopup);
+  errorPopup.setAttribute(`tabindex`, `0`);
   errorPopup.focus();
   // Обработчики закрытия окна
 
-  errorPopup.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
+  errorPopup.addEventListener(`keydown`, (evt) => {
+    if (evt.key === `Escape`) {
       // Удалить окно из разметки
-      document.querySelector('main').removeChild(document.querySelector('main').lastChild);
+      document.querySelector(`main`).removeChild(document.querySelector(`main`).lastChild);
     }
   });
 
-  errorPopup.addEventListener('click', () => {
+  errorPopup.addEventListener(`click`, () => {
     // Удалить окно из разметки
-    document.querySelector('main').removeChild(document.querySelector('main').lastChild);
+    document.querySelector(`main`).removeChild(document.querySelector(`main`).lastChild);
   });
 
-  errorPopup.querySelector('.error__button').addEventListener('click', () => {
+  errorPopup.querySelector(`.error__button`).addEventListener(`click`, () => {
     // Удалить окно из разметки
-    document.querySelector('main').removeChild(document.querySelector('main').lastChild);
+    document.querySelector(`main`).removeChild(document.querySelector(`main`).lastChild);
   });
 };
 
-adForm.addEventListener('submit', (evt) => {
+advert.addEventListener(`submit`, (evt) => {
   evt.preventDefault();
   // Получаем данные с формы.
-  let dataForm = new FormData(adForm);
+  let dataForm = new FormData(advert);
   // Вызываем функцию отправки формы
-  window.load.loadData(getSuccessForm, getError, 'POST', window.data.URL_UPLOAD, dataForm);
+  window.load.onData(getSuccessForm, getError, `POST`, window.data.URL_UPLOAD, dataForm);
 });
 
 
 // Обработчик кнопки сброса формы,
-const buttonFormReset = document.querySelector('.ad-form__reset');
+const buttonFormReset = document.querySelector(`.ad-form__reset`);
 const buttonResetClickHandler = (evtReset) => {
   evtReset.preventDefault();
   // Деактивируем главную страницу и сбрасываем форму
   window.map.deactivatePage();
 };
 
-buttonFormReset.addEventListener('click', buttonResetClickHandler);
+buttonFormReset.addEventListener(`click`, buttonResetClickHandler);
 
 // Загрузка превью аватара и первой фотографии жилья
-const fileChooserAvatar = document.querySelector('.ad-form-header__upload input[type=file]');
-const previewAvatar = document.querySelector('.ad-form-header__preview img');
+const fileChooserAvatar = document.querySelector(`.ad-form-header__upload input[type=file]`);
+const previewAvatar = document.querySelector(`.ad-form-header__preview img`);
 
-fileChooserAvatar.addEventListener('change', () => {
+fileChooserAvatar.addEventListener(`change`, () => {
   const file = fileChooserAvatar.files[0];
   const reader = new FileReader();
 
-  reader.addEventListener('load', () => {
+  reader.addEventListener(`load`, () => {
     previewAvatar.src = reader.result;
   });
 
   reader.readAsDataURL(file);
 });
 
-const fileChooserRealEstatePicture = document.querySelector('.ad-form__upload input[type=file]');
-const previewBlockRealEstate = document.querySelector('.ad-form__photo');
-const previewRealEstatePicture = document.createElement('img');
+const fileChooserRealEstatePicture = document.querySelector(`.ad-form__upload input[type=file]`);
+const previewBlockRealEstate = document.querySelector(`.ad-form__photo`);
+const previewRealEstatePicture = document.createElement(`img`);
 
 // Выравнивание по центру содержимого в блоке
-previewBlockRealEstate.style = 'display: flex; justify-content: center; align-items: center';
+previewBlockRealEstate.style = `display: flex; justify-content: center; align-items: center`;
 
 // Свойства картинки
-previewRealEstatePicture.alt = 'Фото жилья';
+previewRealEstatePicture.alt = `Фото жилья`;
 previewRealEstatePicture.width = 40;
 previewRealEstatePicture.height = 44;
 previewBlockRealEstate.appendChild(previewRealEstatePicture);
 
-fileChooserRealEstatePicture.addEventListener('change', () => {
+fileChooserRealEstatePicture.addEventListener(`change`, () => {
   const file = fileChooserRealEstatePicture.files[0];
   const reader = new FileReader();
 
-  reader.addEventListener('load', () => {
+  reader.addEventListener(`load`, () => {
     previewRealEstatePicture.src = reader.result;
   });
 
@@ -243,5 +243,5 @@ fileChooserRealEstatePicture.addEventListener('change', () => {
 
 // Экспорт данных
 window.form = {
-  adForm: adForm
+  advert
 };

@@ -28,6 +28,7 @@ const render = (realEstatesPin) => {
     newPinElement.setAttribute(`data-index`, i);
     fragment.appendChild(newPinElement);
   }
+
   return fragment;
 };
 

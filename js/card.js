@@ -47,11 +47,11 @@ const render = (realEstateCard) => {
   }
   if (realEstateCard[`offer`][`features`] && (realEstateCard[`offer`][`features`].length !== 0)) {
     // Добавляем нужные услуги в разметку
-    for (let i = 0; i < realEstateCard[`offer`][`features`].length; i++) {
+    realEstateCard[`offer`][`features`].forEach((item) => {
       const elementFeature = document.createElement(`li`);
-      elementFeature.className = `popup__feature popup__feature--${realEstateCard[`offer`][`features`][i]}`;
+      elementFeature.className = `popup__feature popup__feature--${item}`;
       popupFeatures.appendChild(elementFeature);
-    }
+    });
   } else {
     popupFeatures.classList.add(`visually-hidden`);
   }
@@ -65,11 +65,11 @@ const render = (realEstateCard) => {
   const popupPhotos = cardElement.querySelector(`.popup__photos`);
 
   if (realEstateCard[`offer`][`photos`] && (realEstateCard[`offer`][`photos`].length > 0)) {
-    for (let i = 0; i < realEstateCard[`offer`][`photos`].length; i++) {
+    realEstateCard[`offer`][`photos`].forEach((item) => {
       const popupPhoto = popupPhotos.querySelector(`img`).cloneNode(true);
-      popupPhoto.src = realEstateCard[`offer`][`photos`][i];
+      popupPhoto.src = item;
       popupPhotos.appendChild(popupPhoto);
-    }
+    });
     // Удаляем шаблонную фотокарточку.
     popupPhotos.children[0].remove();
   } else {

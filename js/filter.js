@@ -24,6 +24,7 @@ const filterRealEstates = () => {
   const valuesFeatures = [];
   // Получаем выбранные значения фильтров из формы
   const checkedFilters = form.querySelectorAll(`:checked`);
+
   for (let checkedFilter of checkedFilters) {
     if (checkedFilter.tagName === `OPTION`) {
       valuesFormFilters.set(window.data.FILTER_TYPE[checkedFilter.parentNode.name], checkedFilter.value);
@@ -58,13 +59,13 @@ const filterRealEstates = () => {
     // Проверяем, выбраны ли фильтры features в форме и есть ли фильтры features в объявлении
     if ((valuesFeatures.length !== 0) && (realEstateFeatures.length !== 0)) {
       // Цикл из количества выбранных фильтров
-      for (let i = 0; i < valuesFeatures.length; i++) {
+      valuesFeatures.forEach((item) => {
         // Проверить, есть ли значение данного фильтра features в массиве у объекта
         // если нет, то присвоить false
-        if (!(realEstateFeatures.includes(valuesFeatures[i]))) {
+        if (!(realEstateFeatures.includes(item))) {
           featuresFilter = false;
         }
-      }
+      });
     } else if (valuesFeatures.length !== 0) {
       // Если фильтры выбраны, а массив features у объекта пустой,
       // то присваиваем false, такой объект не подходит по условиям фильтрации

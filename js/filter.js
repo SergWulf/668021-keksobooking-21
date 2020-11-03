@@ -25,14 +25,14 @@ const filterRealEstates = () => {
   // Получаем выбранные значения фильтров из формы
   const checkedFilters = form.querySelectorAll(`:checked`);
 
-  for (let checkedFilter of checkedFilters) {
+  checkedFilters.forEach((checkedFilter) => {
     if (checkedFilter.tagName === `OPTION`) {
       valuesFormFilters.set(window.data.FILTER_TYPE[checkedFilter.parentNode.name], checkedFilter.value);
     }
     if (checkedFilter.tagName === `INPUT`) {
       valuesFeatures.push(checkedFilter.value);
     }
-  }
+  });
 
   // Функция проверки по цене, если у объекта недвижимости и фильтра по цене данные совпадают, то вернут true
   const isPrice = (realEstatePrice) => {
@@ -119,9 +119,9 @@ form.addEventListener(`keydown`, (evt) => {
 // Активация полей формы с фильтрами
 const activateForm = () => {
   form.classList.remove(`ad-form--disabled`);
-  for (let i = 0; i < form.children.length; i++) {
-    form.children[i].removeAttribute(`disabled`);
-  }
+  Array.prototype.forEach.call(form.children, (child) => {
+    child.removeAttribute(`disabled`);
+  });
 };
 
 // Экспорт данных

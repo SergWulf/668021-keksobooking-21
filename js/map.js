@@ -17,13 +17,8 @@ const renderPinsJSON = () => {
 const removePins = () => {
   // Находим и удаляем метки
   const pins = document.querySelectorAll(`.map__pin:not(.map__pin--main`);
-  // Успешно скомуниздил со stackoverflow.com ))
-  // Понял что пробегает по меткам, и удаляет их,
-  // но как он их делает живыми, то есть как он связывается с node
-  // В общем много чего не понял(prototype, call), но красивый код, всё работает,
-  // почитаю сегодня подробней об этом ))))
-  Array.prototype.forEach.call(pins, (node) => {
-    node.parentNode.removeChild(node);
+  pins.forEach((node) => {
+    node.parentElement.removeChild(node);
   });
 };
 
@@ -72,9 +67,9 @@ const getError = (message) => {
 const activatePage = () => {
   adverts.classList.remove(`map--faded`);
   window.form.advert.classList.remove(`ad-form--disabled`);
-  for (let i = 0; i < window.form.advert.children.length; i++) {
-    window.form.advert.children[i].removeAttribute(`disabled`);
-  }
+  Array.prototype.forEach.call(window.form.advert.children, (child) => {
+    child.removeAttribute(`disabled`);
+  });
   // Загружаем JSON данные после активации
   window.load.onData(getData, getError, `GET`, window.data.URL_DOWNLOAD);
 };
@@ -111,14 +106,14 @@ const deactivatePage = () => {
   window.form.advert.classList.add(`ad-form--disabled`);
 
   // Блокируем изменение атрибутов формы
-  for (let i = 0; i < window.form.advert.children.length; i++) {
-    window.form.advert.children[i].setAttribute(`disabled`, `disabled`);
-  }
+  Array.prototype.forEach.call(window.form.advert.children, (child) => {
+    child.setAttribute(`disabled`, `disabled`);
+  });
 
   // Блокируем изменение атрибутов блока фильтров
-  for (let i = 0; i < window.filter.form.children.length; i++) {
-    window.filter.form.children[i].setAttribute(`disabled`, `disabled`);
-  }
+  Array.prototype.forEach.call(window.filter.form.children, (child) => {
+    child.setAttribute(`disabled`, `disabled`);
+  });
 
   // Записать начальные данные координат в форму объявления
   window.form.advert.querySelector(`#address`).setAttribute(`value`, window.data.LEFT_MAP_PIN + `, ` + window.data.TOP_MAP_PIN);

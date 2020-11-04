@@ -109,26 +109,27 @@ capacityForm.addEventListener(`change`, validateGuestsInRoom);
 // 4.2 Если данные отправились не успешно, то отобразить сообщение с ид #error из template, в секции main,
 //     Сообщение должно исчезать по нажатию на кнопку .error__button, Esc и по любому клику за пределами сообщения.
 
+const mainNode = document.querySelector(`main`);
 // Коллбэк функция успешной отправки данных формы.
 const getSuccessForm = () => {
   window.map.deactivatePage();
   // Найти template Success и отобразить его, повесить обработчик на закрытие
   const templateSuccess = document.querySelector(`#success`).content.querySelector(`.success`);
   const successPopup = templateSuccess.cloneNode(true);
-  document.querySelector(`main`).appendChild(successPopup);
+  mainNode.appendChild(successPopup);
   successPopup.setAttribute(`tabindex`, `0`);
   successPopup.focus();
 
   // Обработчики закрытия окна
   successPopup.addEventListener(`click`, () => {
     // Удалить окно из разметки
-    document.querySelector(`main`).removeChild(document.querySelector(`main`).lastChild);
+    mainNode.removeChild(mainNode.lastChild);
   });
 
   successPopup.addEventListener(`keydown`, (evt) => {
     if (evt.key === `Escape`) {
       // Удалить окно из разметки
-      document.querySelector(`main`).removeChild(document.querySelector(`main`).lastChild);
+      mainNode.removeChild(mainNode.lastChild);
     }
   });
 };
@@ -139,7 +140,7 @@ const getError = (message) => {
   const templateError = document.querySelector(`#error`).content.querySelector(`.error`);
   const errorPopup = templateError.cloneNode(true);
   errorPopup.querySelector(`p`).textContent = message;
-  document.querySelector(`main`).appendChild(errorPopup);
+  mainNode.appendChild(errorPopup);
   errorPopup.setAttribute(`tabindex`, `0`);
   errorPopup.focus();
   // Обработчики закрытия окна
@@ -147,18 +148,18 @@ const getError = (message) => {
   errorPopup.addEventListener(`keydown`, (evt) => {
     if (evt.key === `Escape`) {
       // Удалить окно из разметки
-      document.querySelector(`main`).removeChild(document.querySelector(`main`).lastChild);
+      mainNode.removeChild(mainNode.lastChild);
     }
   });
 
   errorPopup.addEventListener(`click`, () => {
     // Удалить окно из разметки
-    document.querySelector(`main`).removeChild(document.querySelector(`main`).lastChild);
+    mainNode.removeChild(mainNode.lastChild);
   });
 
   errorPopup.querySelector(`.error__button`).addEventListener(`click`, () => {
     // Удалить окно из разметки
-    document.querySelector(`main`).removeChild(document.querySelector(`main`).lastChild);
+    mainNode.removeChild(mainNode.lastChild);
   });
 };
 

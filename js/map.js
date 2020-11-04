@@ -6,9 +6,18 @@
 const HALF_WIDTH_MAIN_PIN = 31;
 const HALF_HEIGHT_MAIN_PIN = 31;
 
+
+// Находим карту объявлений и главную метку в DOM
+const adverts = document.querySelector(`.map`);
+const card = adverts.querySelector(`.map__card`);
+const pin = document.querySelector(`.map__pin--main`);
+
+
+const formFilter = document.querySelector(`.map__filters`);
+
 // Начальные координаты центра главной метки. MAP
-const LEFT_MAP_PIN = document.querySelector(`.map__pin--main`).offsetLeft + HALF_WIDTH_MAIN_PIN;
-const TOP_MAP_PIN = document.querySelector(`.map__pin--main`).offsetTop + HALF_HEIGHT_MAIN_PIN;
+const LEFT_MAP_PIN = pin.offsetLeft + HALF_WIDTH_MAIN_PIN;
+const TOP_MAP_PIN = pin.offsetTop + HALF_HEIGHT_MAIN_PIN;
 
 const URL_DOWNLOAD = `https://21.javascript.pages.academy/keksobooking/data`;
 
@@ -25,12 +34,6 @@ const getRealEstate = () => {
 const setFilteredRealEstates = (newRealEstates) => {
   filteredRealEstates = newRealEstates;
 };
-
-// Находим карту объявлений и главную метку в DOM
-const adverts = document.querySelector(`.map`);
-const pin = document.querySelector(`.map__pin--main`);
-
-const formFilter = document.querySelector(`.map__filters`);
 
 // Функция отображения меток
 const renderPinsJSON = () => {
@@ -80,6 +83,7 @@ const getData = (dataJSON) => {
 
 // Коллбэк функция успешной отправки данных формы.
 const getError = (message) => {
+  const tagMain = document.querySelector(`main`);
   const errorPopup = document.createElement(`DIV`);
   errorPopup.classList.add(`error`);
   const errorText = document.createElement(`P`);
@@ -88,18 +92,18 @@ const getError = (message) => {
   errorPopup.appendChild(errorText);
   errorPopup.setAttribute(`tabindex`, `0`);
   errorPopup.focus();
-  document.querySelector(`main`).appendChild(errorPopup);
+  tagMain.appendChild(errorPopup);
 
   // Обработчики закрытия окна
   errorPopup.addEventListener(`click`, () => {
     // Удалить окно из разметки
-    document.querySelector(`main`).removeChild(document.querySelector(`main`).lastChild);
+    tagMain.removeChild(tagMain.lastChild);
   });
 
   errorPopup.addEventListener(`keydown`, (evt) => {
     if (evt.key === `Escape`) {
       // Удалить окно из разметки
-      document.querySelector(`main`).removeChild(document.querySelector(`main`).lastChild);
+      tagMain.removeChild(tagMain.lastChild);
     }
   });
 };
@@ -162,8 +166,8 @@ const deactivatePage = () => {
   pin.style.top = `${TOP_MAP_PIN - HALF_HEIGHT_MAIN_PIN}px`;
 
   // Если есть карточка с характеристиками обьявления, то удаляем ее из разметки
-  if (adverts.querySelector(`.map__card`)) {
-    adverts.removeChild(adverts.querySelector(`.map__card`));
+  if (card) {
+    adverts.removeChild(card);
   }
 
   // Удаление меток
@@ -197,8 +201,8 @@ adverts.addEventListener(`click`, (evt) => {
     target.classList.add(`map__pin--active`);
 
     // Если уже есть карточка с характеристиками обьявления, то удаляем ее из разметки
-    if (adverts.querySelector(`.map__card`)) {
-      adverts.removeChild(adverts.querySelector(`.map__card`));
+    if (card) {
+      adverts.removeChild(card);
     }
     // Отображаем карточку объявлений соответствующую метке.
     adverts.insertBefore(window.card.render(filteredRealEstates[target.dataset.index]), adverts.children[1]);
@@ -208,8 +212,8 @@ adverts.addEventListener(`click`, (evt) => {
 
 // Вешаем обработчик, который перехватывает нажатие клавиши ESC на всей карте.
 adverts.addEventListener(`keydown`, (evt) => {
-  if ((adverts.querySelector(`.map__card`)) && (evt.key === `Escape`)) {
-    adverts.querySelector(`.map__card`).classList.add(`hidden`);
+  if ((card) && (evt.key === `Escape`)) {
+    card.classList.add(`hidden`);
   }
 });
 

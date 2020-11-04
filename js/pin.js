@@ -21,8 +21,9 @@ const renderPin = (realEstatePin) => {
   const pinPointerCoordinateX = Number(realEstatePin[`location`][`x`]) - COORDINATE_PIN_X;
   const pinPointerCoordinateY = Number(realEstatePin[`location`][`y`]) - COORDINATE_PIN_Y;
   pinElement.style = `left: ${pinPointerCoordinateX}px; top: ${pinPointerCoordinateY}px;`;
-  pinElement.querySelector(`img`).src = realEstatePin[`author`][`avatar`];
-  pinElement.querySelector(`img`).alt = realEstatePin[`offer`][`title`];
+  const pinElementImg = pinElement.querySelector(`img`);
+  pinElementImg.src = realEstatePin[`author`][`avatar`];
+  pinElementImg.alt = realEstatePin[`offer`][`title`];
   return pinElement;
 };
 

@@ -24,9 +24,10 @@ const form = document.querySelector(`.map__filters`);
 // Функция фильтрации массива
 const filterRealEstates = () => {
   // Проверяем, есть ли карточка объявления, если есть и она не скрыта, то скрываем её
-  if (window.map.adverts.querySelector(`.map__card`)) {
-    if (!window.map.adverts.querySelector(`.map__card`).classList.contains(`hidden`)) {
-      window.map.adverts.querySelector(`.map__card`).classList.add(`hidden`);
+  const mapCard = window.map.adverts.querySelector(`.map__card`);
+  if (mapCard) {
+    if (!mapCard.classList.contains(`hidden`)) {
+      mapCard.classList.add(`hidden`);
     }
   }
   // Очищаем карту от предыдущих меток

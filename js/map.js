@@ -9,7 +9,6 @@ const HALF_HEIGHT_MAIN_PIN = 31;
 
 // Находим карту объявлений и главную метку в DOM
 const adverts = document.querySelector(`.map`);
-const card = adverts.querySelector(`.map__card`);
 const pin = document.querySelector(`.map__pin--main`);
 
 
@@ -144,6 +143,20 @@ const buttonKeyDownHandler = (evt) => {
 pin.addEventListener(`keydown`, buttonKeyDownHandler);
 pin.addEventListener(`mousedown`, buttonMouseDownHandler);
 
+// Нужна функция, которая проверяет, есть ли карта и удаляет ее из разметки
+const deleteCard = () => {
+  const card = adverts.querySelector(`.map__card`);
+  if (card) {
+    adverts.removeChild(card);
+  }
+};
+
+// Удаление обработчикв закрытия карточки
+const removeEventsCard = () => {
+  document.removeEventListener(`click`, buttonClickHandler);
+  document.removeEventListener(`keydown`, keydownEscapeHandler);
+};
+
 // Функция деактивации: удаляются метки, деактивируется карта
 // блокируются фильтры, форма.
 const deactivatePage = () => {
@@ -166,9 +179,7 @@ const deactivatePage = () => {
   pin.style.top = `${TOP_MAP_PIN - HALF_HEIGHT_MAIN_PIN}px`;
 
   // Если есть карточка с характеристиками обьявления, то удаляем ее из разметки
-  if (card) {
-    adverts.removeChild(card);
-  }
+  deleteCard();
 
   // Удаление меток
   removePins();
@@ -179,6 +190,18 @@ const deactivatePage = () => {
 };
 
 deactivatePage();
+// Функции обработчик удаления карточки из разметки
+const buttonClickHandler = () => {
+  deleteCard();
+  removeEventsCard();
+};
+
+const keydownEscapeHandler = (evt) => {
+  if (evt.key === `Escape`) {
+    deleteCard();
+    removeEventsCard();
+  }
+};
 
 // Обработчик события клика мыши на метке для отображения карточки объявления
 adverts.addEventListener(`click`, (evt) => {
@@ -201,19 +224,19 @@ adverts.addEventListener(`click`, (evt) => {
     target.classList.add(`map__pin--active`);
 
     // Если уже есть карточка с характеристиками обьявления, то удаляем ее из разметки
-    if (card) {
-      adverts.removeChild(card);
-    }
+    deleteCard();
+
     // Отображаем карточку объявлений соответствующую метке.
     adverts.insertBefore(window.card.render(filteredRealEstates[target.dataset.index]), adverts.children[1]);
-  }
-});
 
+    // Находим кнопку-крестик в окне отображения карточки
+    const closePopup = document.querySelector(`.popup__close`);
+    // Вешаем обработчик, в котором по клику скрываем блок карточки
+    closePopup.addEventListener(`click`, buttonClickHandler);
 
-// Вешаем обработчик, который перехватывает нажатие клавиши ESC на всей карте.
-adverts.addEventListener(`keydown`, (evt) => {
-  if ((card) && (evt.key === `Escape`)) {
-    card.classList.add(`hidden`);
+    // После этого нужно повесить обработчики на закрыитие карты
+    // Вешаем обработчик, который перехватывает нажатие клавиши ESC
+    document.addEventListener(`keydown`, keydownEscapeHandler);
   }
 });
 

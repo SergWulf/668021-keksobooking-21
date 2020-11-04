@@ -96,13 +96,6 @@ const render = (realEstateCard) => {
     popupAvatar.classList.add(`visually-hidden`);
   }
 
-  // Находим кнопку-крестик в окне отображения карточки
-  const closePopup = cardElement.querySelector(`.popup__close`);
-  // Вешаем обработчик, в котором по клику скрываем блок карточки
-  closePopup.addEventListener(`click`, () => {
-    cardElement.classList.add(`hidden`);
-  });
-
   return cardElement;
 };
 

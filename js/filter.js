@@ -26,8 +26,8 @@ const filterRealEstates = () => {
   // Проверяем, есть ли карточка объявления, если есть и она не скрыта, то скрываем её
   const mapCard = window.map.adverts.querySelector(`.map__card`);
   if (mapCard) {
-    if (!mapCard.classList.contains(`hidden`)) {
-      mapCard.classList.add(`hidden`);
+    if (!mapCard.classList.contains(`visually-hidden`)) {
+      mapCard.classList.add(`visually-hidden`);
     }
   }
   // Очищаем карту от предыдущих меток

@@ -52,16 +52,13 @@ typeOfHouseForm.addEventListener(`change`, (evt) => {
 // 1. Обработка события на каждом поле
 // 2. Если одно поле принимает определенное значение, то и другое поле, послы выбора значения, принимает тоже значение
 
-const validateTime = (evt) => {
-  if (evt.currentTarget.name === `timeout`) {
-    timeInForm.options.selectedIndex = timeOutForm.options.selectedIndex;
-  } else {
-    timeOutForm.options.selectedIndex = timeInForm.options.selectedIndex;
-  }
-};
+timeInForm.addEventListener(`change`, () => {
+  timeOutForm.options.selectedIndex = timeInForm.options.selectedIndex;
+});
 
-timeInForm.addEventListener(`change`, validateTime);
-timeOutForm.addEventListener(`change`, validateTime);
+timeOutForm.addEventListener(`change`, () => {
+  timeInForm.options.selectedIndex = timeOutForm.options.selectedIndex;
+});
 
 const validateGuestsInRoom = (evt) => {
   // Сразу записываем сообщения об несоответствии комнат и гостей, в дальнейшем эти значения примут истинные значения
@@ -87,7 +84,7 @@ const validateGuestsInRoom = (evt) => {
   }
 
   // Основная проверка соответствия комнат гостям,
-  // Если комнаты соответствуют гостям и поля не содержать максимальных значений,
+  // Если комнаты соответствуют гостям и поля не содержат максимальных значений,
   // или есть максимальные значения, но они в обоих полях, то всё валидно, иначе выводим сообщение!
   if ((expressionWithoutMaxValue && currentExpressionCondition) || (expressionWithMaxValue)) {
     roomNumberForm.setCustomValidity(``);

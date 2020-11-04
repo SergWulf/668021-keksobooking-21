@@ -18,43 +18,12 @@ const URL_UPLOAD = `https://21.javascript.pages.academy/keksobooking`;
 
 // Элементы формы DOM
 const advert = document.querySelector(`.ad-form`);
-const titleForm = document.querySelector(`#title`);
 const priceForm = document.querySelector(`#price`);
-const addressForm = document.querySelector(`#address`);
 const typeOfHouseForm = document.querySelector(`#type`);
 const timeInForm = document.querySelector(`#timein`);
 const timeOutForm = document.querySelector(`#timeout`);
-const avatarForm = document.querySelector(`#avatar`);
-const imagesForm = document.querySelector(`#images`);
-
 const roomNumberForm = document.querySelector(`#room_number`);
 const capacityForm = document.querySelector(`#capacity`);
-
-
-// Функция ограничений для полей ввода формы объявлений, до валидации формы
-const createAttributesForm = () => {
-
-  // 0. Найти форму в DOM, установить ей атрибут action = "https://javascript.pages.academy/keksobooking"
-  advert.setAttribute(`action`, `https://javascript.pages.academy/keksobooking`);
-
-  // 1. Найти заголовок объявления в разметке, установить для него атрибуты: обязательное текстовое, минимальное длина 30 сим, максимальная 100 символов.
-  titleForm.setAttribute(`required`, `required`);
-  titleForm.setAttribute(`minlength`, `30`);
-  titleForm.setAttribute(`maxlength`, `100`);
-
-  // 2. Цена за ночь. Обязательное числовое поле. Максимальное значение 1 000 000.
-  priceForm.setAttribute(`required`, `required`);
-  priceForm.setAttribute(`max`, `1000000`);
-
-  // 3. Адрес, обязательное поле, недоступно для редактирования
-  addressForm.setAttribute(`readonly`, `readonly`);
-
-  // 4. Ограничение на тип загружаемых файлов, они могут быть только изображениями
-  avatarForm.setAttribute(`accept`, `image/*`);
-  imagesForm.setAttribute(`accept`, `image/*`);
-};
-
-createAttributesForm();
 
 // 3. Тип жилья. В зависимости от типа, меняется минимальная цена и отображается в виде плейсхолдера.
 // Валидация соответствия: вид жительста - минимальная цена

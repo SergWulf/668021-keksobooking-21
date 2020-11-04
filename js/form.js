@@ -6,6 +6,16 @@ const MAX_ROOMS = 100;
 const MAX_GUESTS = 0;
 const MESSAGE_ERROR_VALIDATION = `Количество гостей не соответствует количеству комнат: 1 комната - 1 гость, 2 комнаты - 1 или 2 гостя, 3 комнаты - 1, 2 или 3 гостя, 100 комнат - не для гостей`;
 
+// Соответствие минимальной цены для объектов недвижимости
+const TYPE_RESIDENCE_PRICE = {
+  'palace': 10000,
+  'house': 5000,
+  'bungalow': 0,
+  'flat': 1000
+};
+
+const URL_UPLOAD = `https://21.javascript.pages.academy/keksobooking`;
+
 // Элементы формы DOM
 const advert = document.querySelector(`.ad-form`);
 const titleForm = document.querySelector(`#title`);
@@ -55,14 +65,14 @@ createAttributesForm();
 // Вместе с минимальным значением цены нужно изменять и плейсхолдер.
 
 // Обработка первоначального значения формы
-priceForm.setAttribute(`min`, window.data.TYPE_RESIDENCE_PRICE[typeOfHouseForm.options[typeOfHouseForm.selectedIndex].value]);
-priceForm.setAttribute(`placeholder`, window.data.TYPE_RESIDENCE_PRICE[typeOfHouseForm.options[typeOfHouseForm.selectedIndex].value]);
+priceForm.setAttribute(`min`, TYPE_RESIDENCE_PRICE[typeOfHouseForm.options[typeOfHouseForm.selectedIndex].value]);
+priceForm.setAttribute(`placeholder`, TYPE_RESIDENCE_PRICE[typeOfHouseForm.options[typeOfHouseForm.selectedIndex].value]);
 
 
 // Вешаем обработчик на изменение типа жилья
 typeOfHouseForm.addEventListener(`change`, (evt) => {
-  priceForm.setAttribute(`min`, window.data.TYPE_RESIDENCE_PRICE[typeOfHouseForm.options[evt.currentTarget.selectedIndex].value]);
-  priceForm.setAttribute(`placeholder`, window.data.TYPE_RESIDENCE_PRICE[typeOfHouseForm.options[evt.currentTarget.selectedIndex].value]);
+  priceForm.setAttribute(`min`, TYPE_RESIDENCE_PRICE[typeOfHouseForm.options[evt.currentTarget.selectedIndex].value]);
+  priceForm.setAttribute(`placeholder`, TYPE_RESIDENCE_PRICE[typeOfHouseForm.options[evt.currentTarget.selectedIndex].value]);
 });
 
 // Валидация полей заезды и выезда
@@ -188,7 +198,7 @@ advert.addEventListener(`submit`, (evt) => {
   // Получаем данные с формы.
   let dataForm = new FormData(advert);
   // Вызываем функцию отправки формы
-  window.load.onData(getSuccessForm, getError, `POST`, window.data.URL_UPLOAD, dataForm);
+  window.load.onData(getSuccessForm, getError, `POST`, URL_UPLOAD, dataForm);
 });
 
 

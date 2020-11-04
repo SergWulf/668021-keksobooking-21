@@ -2,6 +2,13 @@
 
 // Модуль отрисовки карточки
 
+const TYPE_RESIDENCE = {
+  'palace': `Дворец`,
+  'house': `Дом`,
+  'bungalow': `Бунгало`,
+  'flat': `Квартира`
+};
+
 // Создаем шаблон для отображения карточки объекта недвижимости
 const cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
 
@@ -24,7 +31,7 @@ const render = (realEstateCard) => {
     cardElement.querySelector(`.popup__text--price`).classList.add(`visually-hidden`);
   }
   if (realEstateCard[`offer`][`type`]) {
-    cardElement.querySelector(`.popup__type`).textContent = window.data.TYPE_RESIDENCE[realEstateCard[`offer`][`type`]];
+    cardElement.querySelector(`.popup__type`).textContent = TYPE_RESIDENCE[realEstateCard[`offer`][`type`]];
   } else {
     cardElement.querySelector(`.popup__type`).classList.add(`visually-hidden`);
   }

@@ -2,23 +2,65 @@
 
 // Модуль карты: создание меток, отображение карточек, обработка событий
 
+// Размеры метки, с помощью которые можно вычислить центр метки MAP
+const HALF_WIDTH_MAIN_PIN = 31;
+const HALF_HEIGHT_MAIN_PIN = 31;
+
+// Начальные координаты центра главной метки. MAP
+const LEFT_MAP_PIN = document.querySelector(`.map__pin--main`).offsetLeft + HALF_WIDTH_MAIN_PIN;
+const TOP_MAP_PIN = document.querySelector(`.map__pin--main`).offsetTop + HALF_HEIGHT_MAIN_PIN;
+
+const URL_DOWNLOAD = `https://21.javascript.pages.academy/keksobooking/data`;
+
+// Массив для хранения данных об объектах недвижимости
+let realEstates = [];
+// Массив отфильтрованных данных
+let filteredRealEstates = [];
+
+
+const getRealEstate = () => {
+  return realEstates;
+};
+
+const setFilteredRealEstates = (newRealEstates) => {
+  filteredRealEstates = newRealEstates;
+};
+
 // Находим карту объявлений и главную метку в DOM
 const adverts = document.querySelector(`.map`);
 const pin = document.querySelector(`.map__pin--main`);
+
+const formFilter = document.querySelector(`.map__filters`);
 
 // Функция отображения меток
 const renderPinsJSON = () => {
   // Находим блок, где будем отображать метки и отображаем их
   const blockPins = document.querySelector(`.map__pins`);
-  blockPins.appendChild(window.pin.render(window.data.filterRealEstates));
+  blockPins.appendChild(window.pin.render(filteredRealEstates));
 };
 
 // Функция удаления меток
 const removePins = () => {
   // Находим и удаляем метки
   const pins = document.querySelectorAll(`.map__pin:not(.map__pin--main`);
-  pins.forEach((node) => {
-    node.parentElement.removeChild(node);
+  pins.forEach((nodeChild) => {
+    nodeChild.parentElement.removeChild(nodeChild);
+  });
+};
+
+// Активация полей формы с фильтрами
+const activateFormFilter = () => {
+  formFilter.classList.remove(`ad-form--disabled`);
+  Array.prototype.forEach.call(formFilter.children, (childFilter) => {
+    childFilter.removeAttribute(`disabled`);
+  });
+};
+
+const deactivateFormFilter = () => {
+  formFilter.reset();
+  formFilter.classList.add(`ad-form--disabled`);
+  Array.prototype.forEach.call(formFilter.children, (childFilter) => {
+    childFilter.setAttribute(`disabled`, `disabled`);
   });
 };
 
@@ -28,10 +70,10 @@ const getData = (dataJSON) => {
   let dataWithOffer = dataJSON.filter((realEstate) => {
     return realEstate[`offer`] && realEstate[`author`] && realEstate[`location`];
   });
-  window.data.realEstates = dataWithOffer;
-  window.data.filterRealEstates = dataWithOffer;
+  realEstates = dataWithOffer;
+  filteredRealEstates = dataWithOffer;
   // Так как данные успешно получены, активируем форму фильтрации
-  window.filter.activateForm();
+  activateFormFilter();
   // Вызываем функцию отрисовки меток по JSON данным
   renderPinsJSON();
 };
@@ -67,11 +109,11 @@ const getError = (message) => {
 const activatePage = () => {
   adverts.classList.remove(`map--faded`);
   window.form.advert.classList.remove(`ad-form--disabled`);
-  Array.prototype.forEach.call(window.form.advert.children, (child) => {
-    child.removeAttribute(`disabled`);
+  Array.prototype.forEach.call(window.form.advert.children, (childAdvertForm) => {
+    childAdvertForm.removeAttribute(`disabled`);
   });
   // Загружаем JSON данные после активации
-  window.load.onData(getData, getError, `GET`, window.data.URL_DOWNLOAD);
+  window.load.onData(getData, getError, `GET`, URL_DOWNLOAD);
 };
 
 // Обработчики событий: активируют страницу кексобукинга
@@ -106,20 +148,18 @@ const deactivatePage = () => {
   window.form.advert.classList.add(`ad-form--disabled`);
 
   // Блокируем изменение атрибутов формы
-  Array.prototype.forEach.call(window.form.advert.children, (child) => {
-    child.setAttribute(`disabled`, `disabled`);
+  Array.prototype.forEach.call(window.form.advert.children, (childAdvertForm) => {
+    childAdvertForm.setAttribute(`disabled`, `disabled`);
   });
 
   // Блокируем изменение атрибутов блока фильтров
-  Array.prototype.forEach.call(window.filter.form.children, (child) => {
-    child.setAttribute(`disabled`, `disabled`);
-  });
+  deactivateFormFilter();
 
   // Записать начальные данные координат в форму объявления
-  window.form.advert.querySelector(`#address`).setAttribute(`value`, window.data.LEFT_MAP_PIN + `, ` + window.data.TOP_MAP_PIN);
+  window.form.advert.querySelector(`#address`).setAttribute(`value`, LEFT_MAP_PIN + `, ` + TOP_MAP_PIN);
   // Поставить метку в центр карты
-  pin.style.left = `${window.data.LEFT_MAP_PIN - window.data.HALF_WIDTH_MAIN_PIN}px`;
-  pin.style.top = `${window.data.TOP_MAP_PIN - window.data.HALF_HEIGHT_MAIN_PIN}px`;
+  pin.style.left = `${LEFT_MAP_PIN - HALF_WIDTH_MAIN_PIN}px`;
+  pin.style.top = `${TOP_MAP_PIN - HALF_HEIGHT_MAIN_PIN}px`;
 
   // Если есть карточка с характеристиками обьявления, то удаляем ее из разметки
   if (adverts.querySelector(`.map__card`)) {
@@ -161,7 +201,7 @@ adverts.addEventListener(`click`, (evt) => {
       adverts.removeChild(adverts.querySelector(`.map__card`));
     }
     // Отображаем карточку объявлений соответствующую метке.
-    adverts.insertBefore(window.card.render(window.data.filterRealEstates[target.dataset.index]), adverts.children[1]);
+    adverts.insertBefore(window.card.render(filteredRealEstates[target.dataset.index]), adverts.children[1]);
   }
 });
 
@@ -175,8 +215,12 @@ adverts.addEventListener(`keydown`, (evt) => {
 
 // Экспорт данных
 window.map = {
+  HALF_WIDTH_MAIN_PIN,
+  HALF_HEIGHT_MAIN_PIN,
   adverts,
   pin,
+  getRealEstate,
+  setFilteredRealEstates,
   deactivatePage,
   removePins,
   renderPinsJSON

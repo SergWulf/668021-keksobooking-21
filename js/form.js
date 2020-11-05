@@ -60,7 +60,7 @@ timeOutForm.addEventListener(`change`, () => {
   timeInForm.options.selectedIndex = timeOutForm.options.selectedIndex;
 });
 
-const validateGuestsInRoom = (evt) => {
+const validateGuestsInRoom = () => {
   // Сразу записываем сообщения об несоответствии комнат и гостей, в дальнейшем эти значения примут истинные значения
   roomNumberForm.setCustomValidity(MESSAGE_ERROR_VALIDATION);
   capacityForm.setCustomValidity(MESSAGE_ERROR_VALIDATION);
@@ -78,11 +78,6 @@ const validateGuestsInRoom = (evt) => {
   // Переменная, которая хранит условие проверки соответсвия гостей - комнатам, либо комнат - гостям.
   let currentExpressionCondition = (roomNumberForm.options[roomNumberForm.selectedIndex].value >= capacityForm.options[capacityForm.selectedIndex].value);
 
-  // Если меняется значение гостей, то меняетс условие соответствия гостей комнат
-  if ((Boolean(evt)) && (evt.currentTarget.name === `capacity`)) {
-    currentExpressionCondition = (capacityForm.options[capacityForm.selectedIndex].value <= roomNumberForm.options[roomNumberForm.selectedIndex].value);
-  }
-
   // Основная проверка соответствия комнат гостям,
   // Если комнаты соответствуют гостям и поля не содержат максимальных значений,
   // или есть максимальные значения, но они в обоих полях, то всё валидно, иначе выводим сообщение!
@@ -92,9 +87,15 @@ const validateGuestsInRoom = (evt) => {
   }
 };
 
-validateGuestsInRoom(false);
-roomNumberForm.addEventListener(`change`, validateGuestsInRoom);
-capacityForm.addEventListener(`change`, validateGuestsInRoom);
+validateGuestsInRoom();
+
+roomNumberForm.addEventListener(`change`, () => {
+  validateGuestsInRoom();
+});
+
+capacityForm.addEventListener(`change`, () => {
+  validateGuestsInRoom();
+});
 
 // Обработчик формы
 // 1. Перехватить стандартную отправку формы.

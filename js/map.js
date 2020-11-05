@@ -44,7 +44,7 @@ const renderPinsJSON = () => {
 // Функция удаления меток
 const removePins = () => {
   // Находим и удаляем метки
-  const pins = document.querySelectorAll(`.map__pin:not(.map__pin--main`);
+  const pins = document.querySelectorAll(`.map__pin:not(.map__pin--main)`);
   pins.forEach((nodeChild) => {
     nodeChild.parentElement.removeChild(nodeChild);
   });

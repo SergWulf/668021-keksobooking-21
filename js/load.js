@@ -4,7 +4,7 @@
 // 1. Сделать запрос на получение JSON данных с сервера
 // 2. Проверить, что запрос выполнился успешно, если нет, то обработать все исключения
 
-const onData = (onSuccess, onError, method, URL, data = undefined) => {
+const requestData = (onSuccess, onError, method, URL, data = undefined) => {
   const xhr = new XMLHttpRequest();
 
   xhr.addEventListener(`load`, () => {
@@ -37,5 +37,5 @@ const onData = (onSuccess, onError, method, URL, data = undefined) => {
 };
 
 window.load = {
-  onData
+  requestData
 };

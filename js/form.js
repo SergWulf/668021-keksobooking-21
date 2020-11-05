@@ -109,7 +109,7 @@ capacityForm.addEventListener(`change`, () => {
 
 const mainNode = document.querySelector(`main`);
 // Коллбэк функция успешной отправки данных формы.
-const getSuccessForm = () => {
+const getSuccessFormHandler = () => {
   window.map.deactivatePage();
   // Найти template Success и отобразить его, повесить обработчик на закрытие
   const templateSuccess = document.querySelector(`#success`).content.querySelector(`.success`);
@@ -133,7 +133,7 @@ const getSuccessForm = () => {
 };
 
 // Коллбэк функция, если возникла ошибка в отправке данных
-const getError = (message) => {
+const getErrorHandler = (message) => {
   // Найти template Error и отобразить его, повесить обработчик на закрытие
   const templateError = document.querySelector(`#error`).content.querySelector(`.error`);
   const errorPopup = templateError.cloneNode(true);
@@ -165,8 +165,8 @@ advert.addEventListener(`submit`, (evt) => {
   evt.preventDefault();
   // Получаем данные с формы.
   let dataForm = new FormData(advert);
-  // Вызываем функцию отправки формы
-  window.load.onData(getSuccessForm, getError, `POST`, URL_UPLOAD, dataForm);
+  // Вызываем функцию отправки данных формы
+  window.load.requestData(getSuccessFormHandler, getErrorHandler, `POST`, URL_UPLOAD, dataForm);
 });
 
 

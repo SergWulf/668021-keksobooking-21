@@ -6,25 +6,25 @@
 const HALF_WIDTH_MAIN_PIN = 31;
 const HALF_HEIGHT_MAIN_PIN = 31;
 
+// Начальные координаты  главной метки.
+const LEFT_MAIN_PIN = 570;
+const TOP_MAIN_PIN = 375;
+
+// Координаты центра главной метки
+const LEFT_MAIN_PIN_MAP = LEFT_MAIN_PIN + HALF_WIDTH_MAIN_PIN;
+const TOP_MAIN_PIN_MAP = TOP_MAIN_PIN + HALF_HEIGHT_MAIN_PIN;
+
+const URL_DOWNLOAD = `https://21.javascript.pages.academy/keksobooking/data`;
 
 // Находим карту объявлений и главную метку в DOM
 const adverts = document.querySelector(`.map`);
 const pin = document.querySelector(`.map__pin--main`);
-
-
 const formFilter = document.querySelector(`.map__filters`);
-
-// Начальные координаты центра главной метки. MAP
-const LEFT_MAP_PIN = pin.offsetLeft + HALF_WIDTH_MAIN_PIN;
-const TOP_MAP_PIN = pin.offsetTop + HALF_HEIGHT_MAIN_PIN;
-
-const URL_DOWNLOAD = `https://21.javascript.pages.academy/keksobooking/data`;
 
 // Массив для хранения данных об объектах недвижимости
 let realEstates = [];
 // Массив отфильтрованных данных
 let filteredRealEstates = [];
-
 
 const getRealEstate = () => {
   return realEstates;
@@ -66,7 +66,7 @@ const deactivateFormFilter = () => {
   });
 };
 
-const getData = (dataJSON) => {
+const getDataHandler = (dataJSON) => {
   // Если в каком-то объекте отсутствует поле offer, то удаляем его,
   // также удаляем объекты без полей author и location
   let dataWithOffer = dataJSON.filter((realEstate) => {
@@ -81,7 +81,7 @@ const getData = (dataJSON) => {
 };
 
 // Коллбэк функция успешной отправки данных формы.
-const getError = (message) => {
+const getErrorHandler = (message) => {
   const tagMain = document.querySelector(`main`);
   const errorPopup = document.createElement(`DIV`);
   errorPopup.classList.add(`error`);
@@ -116,7 +116,7 @@ const activatePage = () => {
     childAdvertForm.removeAttribute(`disabled`);
   });
   // Загружаем JSON данные после активации
-  window.load.onData(getData, getError, `GET`, URL_DOWNLOAD);
+  window.load.requestData(getDataHandler, getErrorHandler, `GET`, URL_DOWNLOAD);
 };
 
 // Обработчики событий: активируют страницу кексобукинга
@@ -173,10 +173,10 @@ const deactivatePage = () => {
   deactivateFormFilter();
 
   // Записать начальные данные координат в форму объявления
-  window.form.advert.querySelector(`#address`).setAttribute(`value`, LEFT_MAP_PIN + `, ` + TOP_MAP_PIN);
+  window.form.advert.querySelector(`#address`).setAttribute(`value`, `${LEFT_MAIN_PIN_MAP}, ${TOP_MAIN_PIN_MAP}`);
   // Поставить метку в центр карты
-  pin.style.left = `${LEFT_MAP_PIN - HALF_WIDTH_MAIN_PIN}px`;
-  pin.style.top = `${TOP_MAP_PIN - HALF_HEIGHT_MAIN_PIN}px`;
+  pin.style.left = `${LEFT_MAIN_PIN}px`;
+  pin.style.top = `${TOP_MAIN_PIN}px`;
 
   // Если есть карточка с характеристиками обьявления, то удаляем ее из разметки
   deleteCard();

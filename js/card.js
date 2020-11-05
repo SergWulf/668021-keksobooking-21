@@ -29,7 +29,7 @@ const render = (realEstateCard) => {
   }
   const popupPrice = cardElement.querySelector(`.popup__text--price`);
   if (realEstateCard[`offer`][`price`]) {
-    popupPrice.innerHTML = `${realEstateCard[`offer`][`price`]}&#x20bd;<span>/ночь</span>`;
+    popupPrice.textContent = `${realEstateCard[`offer`][`price`]} ${popupPrice.textContent}`;
   } else {
     popupPrice.classList.add(`visually-hidden`);
   }

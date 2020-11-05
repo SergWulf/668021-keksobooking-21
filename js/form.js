@@ -7,7 +7,7 @@ const MAX_GUESTS = 0;
 const MESSAGE_ERROR_VALIDATION = `Количество гостей не соответствует количеству комнат: 1 комната - 1 гость, 2 комнаты - 1 или 2 гостя, 3 комнаты - 1, 2 или 3 гостя, 100 комнат - не для гостей`;
 
 // Соответствие минимальной цены для объектов недвижимости
-const TYPE_RESIDENCE_PRICE = {
+const TypeResidencePrice = {
   'palace': 10000,
   'house': 5000,
   'bungalow': 0,
@@ -34,14 +34,14 @@ const capacityForm = document.querySelector(`#capacity`);
 // Вместе с минимальным значением цены нужно изменять и плейсхолдер.
 
 // Обработка первоначального значения формы
-priceForm.setAttribute(`min`, TYPE_RESIDENCE_PRICE[typeOfHouseForm.options[typeOfHouseForm.selectedIndex].value]);
-priceForm.setAttribute(`placeholder`, TYPE_RESIDENCE_PRICE[typeOfHouseForm.options[typeOfHouseForm.selectedIndex].value]);
+priceForm.setAttribute(`min`, TypeResidencePrice[typeOfHouseForm.options[typeOfHouseForm.selectedIndex].value]);
+priceForm.setAttribute(`placeholder`, TypeResidencePrice[typeOfHouseForm.options[typeOfHouseForm.selectedIndex].value]);
 
 
 // Вешаем обработчик на изменение типа жилья
 typeOfHouseForm.addEventListener(`change`, (evt) => {
-  priceForm.setAttribute(`min`, TYPE_RESIDENCE_PRICE[typeOfHouseForm.options[evt.currentTarget.selectedIndex].value]);
-  priceForm.setAttribute(`placeholder`, TYPE_RESIDENCE_PRICE[typeOfHouseForm.options[evt.currentTarget.selectedIndex].value]);
+  priceForm.setAttribute(`min`, TypeResidencePrice[typeOfHouseForm.options[evt.currentTarget.selectedIndex].value]);
+  priceForm.setAttribute(`placeholder`, TypeResidencePrice[typeOfHouseForm.options[evt.currentTarget.selectedIndex].value]);
 });
 
 // Валидация полей заезды и выезда

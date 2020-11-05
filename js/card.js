@@ -2,7 +2,7 @@
 
 // Модуль отрисовки карточки
 
-const TYPE_RESIDENCE = {
+const TypeResidence = {
   'palace': `Дворец`,
   'house': `Дом`,
   'bungalow': `Бунгало`,
@@ -35,7 +35,7 @@ const render = (realEstateCard) => {
   }
   const popupType = cardElement.querySelector(`.popup__type`);
   if (realEstateCard[`offer`][`type`]) {
-    popupType.textContent = TYPE_RESIDENCE[realEstateCard[`offer`][`type`]];
+    popupType.textContent = TypeResidence[realEstateCard[`offer`][`type`]];
   } else {
     popupType.classList.add(`visually-hidden`);
   }

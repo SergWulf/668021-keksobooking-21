@@ -5,7 +5,7 @@
 // Фильтрация начинает работать  возникает событие change на форме фильтрации
 
 // Соответствие между названиями данных фильтров в форме и в объекте недвижимости FILTER
-const FILTER_TYPE = {
+const FilterType = {
   'housing-price': `price`,
   'housing-type': `type`,
   'housing-rooms': `rooms`,
@@ -13,7 +13,7 @@ const FILTER_TYPE = {
 };
 
 // FILTER
-const FILTER_PRICE = {
+const FilterPrice = {
   'high': 50000,
   'low': 10000
 };
@@ -41,7 +41,7 @@ const filterRealEstates = () => {
 
   checkedFilters.forEach((checkedFilter) => {
     if (checkedFilter.tagName === `OPTION`) {
-      valuesFormFilters.set(FILTER_TYPE[checkedFilter.parentNode.name], checkedFilter.value);
+      valuesFormFilters.set(FilterType[checkedFilter.parentNode.name], checkedFilter.value);
     }
     if (checkedFilter.tagName === `INPUT`) {
       valuesFeatures.push(checkedFilter.value);
@@ -55,13 +55,13 @@ const filterRealEstates = () => {
 
     switch (valuesFormFilters.get(`price`)) {
       case `middle`:
-        priceFilter = (realEstatePrice <= FILTER_PRICE[`high`]) && (realEstatePrice >= FILTER_PRICE[`low`]);
+        priceFilter = (realEstatePrice <= FilterPrice[`high`]) && (realEstatePrice >= FilterPrice[`low`]);
         break;
       case `high`:
-        priceFilter = ((valuesFormFilters.get(`price`) === `high`) && (realEstatePrice > FILTER_PRICE[`high`]));
+        priceFilter = ((valuesFormFilters.get(`price`) === `high`) && (realEstatePrice > FilterPrice[`high`]));
         break;
       case `low`:
-        priceFilter = ((valuesFormFilters.get(`price`) === `low`) && (realEstatePrice < FILTER_PRICE[`low`]));
+        priceFilter = ((valuesFormFilters.get(`price`) === `low`) && (realEstatePrice < FilterPrice[`low`]));
     }
 
     return priceFilter || (valuesFormFilters.get(`price`) === `any`);

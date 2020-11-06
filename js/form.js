@@ -62,7 +62,6 @@ timeOutForm.addEventListener(`change`, () => {
 
 const validateGuestsInRoom = () => {
   // Сразу записываем сообщения об несоответствии комнат и гостей, в дальнейшем эти значения примут истинные значения
-  roomNumberForm.setCustomValidity(MESSAGE_ERROR_VALIDATION);
   capacityForm.setCustomValidity(MESSAGE_ERROR_VALIDATION);
 
   // Узнаем, есть ли максимальные значения в данный момент в полях: комнаты - гости
@@ -82,12 +81,9 @@ const validateGuestsInRoom = () => {
   // Если комнаты соответствуют гостям и поля не содержат максимальных значений,
   // или есть максимальные значения, но они в обоих полях, то всё валидно, иначе выводим сообщение!
   if ((expressionWithoutMaxValue && currentExpressionCondition) || (expressionWithMaxValue)) {
-    roomNumberForm.setCustomValidity(``);
     capacityForm.setCustomValidity(``);
   }
 };
-
-validateGuestsInRoom();
 
 roomNumberForm.addEventListener(`change`, () => {
   validateGuestsInRoom();
@@ -204,6 +200,7 @@ previewBlockRealEstate.style = `display: flex; justify-content: center; align-it
 
 // Свойства картинки
 previewRealEstatePicture.alt = `Фото жилья`;
+previewRealEstatePicture.src = `img/muffin-grey.svg`;
 previewRealEstatePicture.width = 40;
 previewRealEstatePicture.height = 44;
 previewBlockRealEstate.appendChild(previewRealEstatePicture);

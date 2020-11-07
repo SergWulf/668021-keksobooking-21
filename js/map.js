@@ -100,7 +100,7 @@ const getErrorHandler = (message) => {
   });
 
   errorPopup.addEventListener(`keydown`, (evt) => {
-    if (evt.key === `Escape`) {
+    if (evt.key === window.util.ESCAPE) {
       // Удалить окно из разметки
       tagMain.removeChild(tagMain.lastChild);
     }
@@ -116,7 +116,7 @@ const activatePage = () => {
     childAdvertForm.removeAttribute(`disabled`);
   });
   // Загружаем JSON данные после активации
-  window.load.requestData(getDataHandler, getErrorHandler, `GET`, URL_DOWNLOAD);
+  window.load.requestData(getDataHandler, getErrorHandler, window.util.Method.GET, URL_DOWNLOAD);
 };
 
 // Обработчики событий: активируют страницу кексобукинга
@@ -131,7 +131,7 @@ const buttonMouseDownHandler = (evt) => {
 };
 
 const buttonKeyDownHandler = (evt) => {
-  if (evt.key === `Enter`) {
+  if (evt.key === window.util.ENTER) {
     activatePage();
     // Удаляем обработчики
     pin.removeEventListener(`mousedown`, buttonMouseDownHandler);
@@ -197,7 +197,7 @@ const buttonClickHandler = () => {
 };
 
 const keydownEscapeHandler = (evt) => {
-  if (evt.key === `Escape`) {
+  if (evt.key === window.util.ESCAPE) {
     deleteCard();
     removeEventsCard();
   }

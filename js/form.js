@@ -163,7 +163,7 @@ const getSuccessFormHandler = () => {
   });
 
   successPopup.addEventListener(`keydown`, (evt) => {
-    if (evt.key === `Escape`) {
+    if (evt.key === window.util.ESCAPE) {
       // Удалить окно из разметки
       mainNode.removeChild(mainNode.lastChild);
     }
@@ -182,7 +182,7 @@ const getErrorHandler = (message) => {
   // Обработчики закрытия окна
 
   errorPopup.addEventListener(`keydown`, (evt) => {
-    if (evt.key === `Escape`) {
+    if (evt.key === window.util.ESCAPE) {
       // Удалить окно из разметки
       mainNode.removeChild(mainNode.lastChild);
     }
@@ -199,13 +199,12 @@ const getErrorHandler = (message) => {
   });
 };
 
-
 advert.addEventListener(`submit`, (evt) => {
   evt.preventDefault();
   // Получаем данные с формы.
   let dataForm = new FormData(advert);
   // Вызываем функцию отправки данных формы
-  window.load.requestData(getSuccessFormHandler, getErrorHandler, `POST`, URL_UPLOAD, dataForm);
+  window.load.requestData(getSuccessFormHandler, getErrorHandler, window.util.Method.POST, URL_UPLOAD, dataForm);
 });
 
 // Обработчик кнопки сброса формы,

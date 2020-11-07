@@ -40,10 +40,10 @@ const filterRealEstates = () => {
   const checkedFilters = form.querySelectorAll(`:checked`);
 
   checkedFilters.forEach((checkedFilter) => {
-    if (checkedFilter.tagName === `OPTION`) {
+    if (checkedFilter.tagName === window.util.OPTION) {
       valuesFormFilters.set(FilterType[checkedFilter.parentNode.name], checkedFilter.value);
     }
-    if (checkedFilter.tagName === `INPUT`) {
+    if (checkedFilter.tagName === window.util.INPUT) {
       valuesFeatures.push(checkedFilter.value);
     }
   });
@@ -122,7 +122,7 @@ form.addEventListener(`change`, () => {
 // вызываем событие click, чтобы запустить фильтрацию
 form.addEventListener(`keydown`, (evt) => {
   let target = evt.target;
-  if ((evt.key === `Enter`) && (target.tagName === `INPUT`)) {
+  if ((evt.key === window.util.ENTER) && (target.tagName === window.util.INPUT)) {
     target.click();
   }
 });

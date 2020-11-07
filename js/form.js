@@ -25,6 +25,12 @@ const timeOutForm = document.querySelector(`#timeout`);
 const roomNumberForm = document.querySelector(`#room_number`);
 const capacityForm = document.querySelector(`#capacity`);
 
+const setDefaultPriceForm = () => {
+  // Устанавливаем плейсхолдер цены по-умолчанию для квартиры
+  priceForm.setAttribute(`min`, `${TypeResidencePrice[`flat`]}`);
+  priceForm.setAttribute(`placeholder`, `${TypeResidencePrice[`flat`]}`);
+};
+
 // 3. Тип жилья. В зависимости от типа, меняется минимальная цена и отображается в виде плейсхолдера.
 // Валидация соответствия: вид жительста - минимальная цена
 //     «Бунгало» — минимальная цена за ночь 0;
@@ -32,11 +38,6 @@ const capacityForm = document.querySelector(`#capacity`);
 //     «Дом» — минимальная цена 5 000;
 //     «Дворец» — минимальная цена 10 000;
 // Вместе с минимальным значением цены нужно изменять и плейсхолдер.
-
-// Обработка первоначального значения формы
-priceForm.setAttribute(`min`, TypeResidencePrice[typeOfHouseForm.options[typeOfHouseForm.selectedIndex].value]);
-priceForm.setAttribute(`placeholder`, TypeResidencePrice[typeOfHouseForm.options[typeOfHouseForm.selectedIndex].value]);
-
 
 // Вешаем обработчик на изменение типа жилья
 typeOfHouseForm.addEventListener(`change`, (evt) => {
@@ -64,7 +65,8 @@ const validateGuestsInRoom = () => {
   // Сразу записываем сообщения об несоответствии комнат и гостей, в дальнейшем эти значения примут истинные значения
   capacityForm.setCustomValidity(MESSAGE_ERROR_VALIDATION);
 
-  // Узнаем, есть ли максимальные значения в данный момент в полях: комнаты - гости
+  // Узнаем, есть ли макси
+  // мальные значения в данный момент в полях: комнаты - гости
   const expressionMaxRooms = (Number(roomNumberForm.options[roomNumberForm.selectedIndex].value) === MAX_ROOMS);
   const expressionMaxGuests = (Number(capacityForm.options[capacityForm.selectedIndex].value) === MAX_GUESTS);
 
@@ -104,9 +106,49 @@ capacityForm.addEventListener(`change`, () => {
 //     Сообщение должно исчезать по нажатию на кнопку .error__button, Esc и по любому клику за пределами сообщения.
 
 const mainNode = document.querySelector(`main`);
+
+// Загрузка превью аватара и первой фотографии жилья
+const fileChooserAvatar = document.querySelector(`.ad-form-header__upload input[type=file]`);
+const previewAvatar = document.querySelector(`.ad-form-header__preview img`);
+
+fileChooserAvatar.addEventListener(`change`, () => {
+  const file = fileChooserAvatar.files[0];
+  const reader = new FileReader();
+
+  reader.addEventListener(`load`, () => {
+    previewAvatar.src = reader.result;
+  });
+
+  reader.readAsDataURL(file);
+});
+
+const fileChooserRealEstatePicture = document.querySelector(`.ad-form__upload input[type=file]`);
+const previewBlockRealEstate = document.querySelector(`.ad-form__photo`);
+const previewRealEstatePicture = previewBlockRealEstate.querySelector(`img`);
+// Выравнивание по центру содержимого в блоке
+previewBlockRealEstate.style = `display: flex; justify-content: center; align-items: center`;
+
+fileChooserRealEstatePicture.addEventListener(`change`, () => {
+  const file = fileChooserRealEstatePicture.files[0];
+  const reader = new FileReader();
+
+  reader.addEventListener(`load`, () => {
+    previewRealEstatePicture.src = reader.result;
+  });
+
+  reader.readAsDataURL(file);
+});
+
+const setDefaultSrcImg = () => {
+  previewRealEstatePicture.src = window.util.SRC_DEFAULT_IMAGE;
+  previewAvatar.src = window.util.SRC_DEFAULT_IMAGE;
+};
+
 // Коллбэк функция успешной отправки данных формы.
 const getSuccessFormHandler = () => {
   window.map.deactivatePage();
+  setDefaultPriceForm();
+  setDefaultSrcImg();
   // Найти template Success и отобразить его, повесить обработчик на закрытие
   const templateSuccess = document.querySelector(`#success`).content.querySelector(`.success`);
   const successPopup = templateSuccess.cloneNode(true);
@@ -157,6 +199,7 @@ const getErrorHandler = (message) => {
   });
 };
 
+
 advert.addEventListener(`submit`, (evt) => {
   evt.preventDefault();
   // Получаем данные с формы.
@@ -165,56 +208,17 @@ advert.addEventListener(`submit`, (evt) => {
   window.load.requestData(getSuccessFormHandler, getErrorHandler, `POST`, URL_UPLOAD, dataForm);
 });
 
-
 // Обработчик кнопки сброса формы,
 const buttonFormReset = document.querySelector(`.ad-form__reset`);
 const buttonResetClickHandler = (evtReset) => {
   evtReset.preventDefault();
   // Деактивируем главную страницу и сбрасываем форму
   window.map.deactivatePage();
+  setDefaultPriceForm();
+  setDefaultSrcImg();
 };
 
 buttonFormReset.addEventListener(`click`, buttonResetClickHandler);
-
-// Загрузка превью аватара и первой фотографии жилья
-const fileChooserAvatar = document.querySelector(`.ad-form-header__upload input[type=file]`);
-const previewAvatar = document.querySelector(`.ad-form-header__preview img`);
-
-fileChooserAvatar.addEventListener(`change`, () => {
-  const file = fileChooserAvatar.files[0];
-  const reader = new FileReader();
-
-  reader.addEventListener(`load`, () => {
-    previewAvatar.src = reader.result;
-  });
-
-  reader.readAsDataURL(file);
-});
-
-const fileChooserRealEstatePicture = document.querySelector(`.ad-form__upload input[type=file]`);
-const previewBlockRealEstate = document.querySelector(`.ad-form__photo`);
-const previewRealEstatePicture = document.createElement(`img`);
-
-// Выравнивание по центру содержимого в блоке
-previewBlockRealEstate.style = `display: flex; justify-content: center; align-items: center`;
-
-// Свойства картинки
-previewRealEstatePicture.alt = `Фото жилья`;
-previewRealEstatePicture.src = `img/muffin-grey.svg`;
-previewRealEstatePicture.width = 40;
-previewRealEstatePicture.height = 44;
-previewBlockRealEstate.appendChild(previewRealEstatePicture);
-
-fileChooserRealEstatePicture.addEventListener(`change`, () => {
-  const file = fileChooserRealEstatePicture.files[0];
-  const reader = new FileReader();
-
-  reader.addEventListener(`load`, () => {
-    previewRealEstatePicture.src = reader.result;
-  });
-
-  reader.readAsDataURL(file);
-});
 
 // Экспорт данных
 window.form = {

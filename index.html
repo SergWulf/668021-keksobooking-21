@@ -117,7 +117,7 @@
         </fieldset>
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="price">Цена за ночь, руб.</label>
-          <input id="price" name="price" type="number" placeholder="5000" max="1000000" required>
+          <input id="price" name="price" type="number" placeholder="1000" max="1000000" required>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--time">
           <label class="ad-form__label" for="timein">Время заезда и выезда</label>
@@ -176,7 +176,9 @@
               <input type="file" id="images" name="images" class="ad-form__input visually-hidden" accept="image/*">
               <label for="images" class="ad-form__drop-zone">Загрузить<br>фото...</label>
             </div>
-            <div class="ad-form__photo"></div>
+            <div class="ad-form__photo">
+              <img src="img/muffin-grey.svg" alt="Фото жилья" width="40" height="44">
+            </div>
           </div>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--submit">

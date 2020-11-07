@@ -115,7 +115,7 @@ const filterRealEstates = () => {
 
 // На каждое изменение формы фильтрации вызываем функцию фильтрации
 form.addEventListener(`change`, () => {
-  window.debounce(filterRealEstates);
+  window.util.debounce(filterRealEstates);
 });
 
 // Ловим нажатие клавишы Enter в форме у input features,

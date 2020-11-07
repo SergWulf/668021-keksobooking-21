@@ -9,18 +9,63 @@ const TypeResidence = {
   'flat': `Квартира`
 };
 
+const TypeFieldToClass = {
+  'title': `popup__title`,
+  'address': `popup__text--address`,
+  'price': `popup__text--price`,
+  'type': `popup__type`,
+  'rooms': `popup__text--capacity`
+}
+
 // Создаем шаблон для отображения карточки объекта недвижимости
 const cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
+
+// Отрисовска стандартного поля в карточке
+
+const checkSimplyFields = (data, field) => {
+  if (data) {
+    field.textContent = data;
+  } else {
+    field.classList.add(`visually-hidden`);
+  }
+};
+
+const checkPriceField = (data, field) => {
+
+};
+
+const checkCapacityField = (data, field) => {
+
+};
+
+const checkTimeField = (data, field) => {
+
+};
+
+const checkFeaturesField = (data, field) => {
+
+};
+
+const checkPhotosField = (data, field) => {
+
+};
 
 // Функция отображения карточки, если данных для заполнения блока не хватает, то блок скрывается
 const render = (realEstateCard) => {
   const cardElement = cardTemplate.cloneNode(true);
+  const fieldsCard = cardElement.children;
+  Array.prototype.forEach.call(fieldsCard, (field) => {
+    console.log(field.classList.value);
+  });
   const popupTitle = cardElement.querySelector(`.popup__title`);
+  //renderSimplyField(realEstateCard[`offer`][`title`], popupTitle);
+
   if (realEstateCard[`offer`][`title`]) {
     popupTitle.textContent = realEstateCard[`offer`][`title`];
   } else {
     popupTitle.classList.add(`visually-hidden`);
   }
+
   const popupAddress = cardElement.querySelector(`.popup__text--address`);
   if (realEstateCard[`offer`][`address`]) {
     popupAddress.textContent = realEstateCard[`offer`][`address`];

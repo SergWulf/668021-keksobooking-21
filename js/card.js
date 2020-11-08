@@ -9,137 +9,113 @@ const TypeResidence = {
   'flat': `Квартира`
 };
 
-const TypeFieldToClass = {
-  'title': `popup__title`,
-  'address': `popup__text--address`,
-  'price': `popup__text--price`,
-  'type': `popup__type`,
-  'rooms': `popup__text--capacity`
-}
+// Соотношение полей объекта полям карточки
+const FieldClass = {
+  'title': `.popup__title`,
+  'address': `.popup__text--address`,
+  'price': `.popup__text--price`,
+  'type': `.popup__type`,
+  'rooms': `.popup__text--capacity`,
+  'checkin': `.popup__text--time`,
+  'features': `.popup__features`,
+  'description': `.popup__description`,
+  'photos': `.popup__photos`,
+  'avatar': `.popup__avatar`
+};
 
 // Создаем шаблон для отображения карточки объекта недвижимости
 const cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
 
-// Отрисовска стандартного поля в карточке
-
-const checkSimplyFields = (data, field) => {
-  if (data) {
-    field.textContent = data;
+// Функция проверки списка удобств
+const checkFeaturesField = (data, field) => {
+  // Удаляем все виды услуг из разметки
+  while (field.firstChild) {
+    field.removeChild(field.firstChild);
+  }
+  if (data.length > 0) {
+    // Добавляем нужные услуги в разметку
+    data.forEach((item) => {
+      const elementFeature = document.createElement(`li`);
+      elementFeature.className = `popup__feature popup__feature--${item}`;
+      field.appendChild(elementFeature);
+    });
   } else {
     field.classList.add(`visually-hidden`);
   }
 };
 
-const checkPriceField = (data, field) => {
-
-};
-
-const checkCapacityField = (data, field) => {
-
-};
-
-const checkTimeField = (data, field) => {
-
-};
-
-const checkFeaturesField = (data, field) => {
-
-};
-
+// Функция проверки списка фотографий, если они есть, то отображаем в карточке
 const checkPhotosField = (data, field) => {
+  if (data.length > 0) {
+    data.forEach((item) => {
+      const popupPhoto = field.querySelector(`img`).cloneNode(true);
+      popupPhoto.src = item;
+      field.appendChild(popupPhoto);
+    });
+    // Удаляем шаблонную фотокарточку.
+    field.children[0].remove();
+  } else {
+    field.classList.add(`visually-hidden`);
+  }
+};
 
+// Основная проверка полей по типу в карточке
+const checkField = (data, index, field) => {
+  if (data[index]) {
+    field.classList.remove(`visually-hidden`);
+    switch (index) {
+      case `type`:
+        field.textContent = TypeResidence[data[index]];
+        break;
+      case `price`:
+        field.textContent = `${data[index]} ${field.textContent}`;
+        break;
+      case `rooms`:
+        field.textContent = `${data[index]} комнаты для ${data[`guests`]} гостей`;
+        break;
+      case `checkin`:
+        field.textContent = `Заезд после ${data[index]}, выездо до ${data[`checkout`]}`;
+        break;
+      case `features`:
+        checkFeaturesField(data[index], field);
+        break;
+      case `photos`:
+        checkPhotosField(data[index], field);
+        break;
+      default:
+        field.textContent = data[index];
+    }
+  }
+};
+
+const checkAvatarField = (data, field) => {
+  if (data) {
+    field.src = data;
+    field.classList.remove(`visually-hidden`);
+  }
 };
 
 // Функция отображения карточки, если данных для заполнения блока не хватает, то блок скрывается
 const render = (realEstateCard) => {
   const cardElement = cardTemplate.cloneNode(true);
+
+  // Скрываем все поля карточки по-умолчанию для удобства в будущих проверках
   const fieldsCard = cardElement.children;
-  Array.prototype.forEach.call(fieldsCard, (field) => {
-    console.log(field.classList.value);
+  Array.prototype.forEach.call(fieldsCard, (fieldCard) => {
+    if (!fieldCard.classList.contains(`popup__close`)) {
+      fieldCard.classList.add(`visually-hidden`);
+    }
   });
-  const popupTitle = cardElement.querySelector(`.popup__title`);
-  //renderSimplyField(realEstateCard[`offer`][`title`], popupTitle);
 
-  if (realEstateCard[`offer`][`title`]) {
-    popupTitle.textContent = realEstateCard[`offer`][`title`];
-  } else {
-    popupTitle.classList.add(`visually-hidden`);
-  }
-
-  const popupAddress = cardElement.querySelector(`.popup__text--address`);
-  if (realEstateCard[`offer`][`address`]) {
-    popupAddress.textContent = realEstateCard[`offer`][`address`];
-  } else {
-    popupAddress.classList.add(`visually-hidden`);
-  }
-  const popupPrice = cardElement.querySelector(`.popup__text--price`);
-  if (realEstateCard[`offer`][`price`]) {
-    popupPrice.textContent = `${realEstateCard[`offer`][`price`]} ${popupPrice.textContent}`;
-  } else {
-    popupPrice.classList.add(`visually-hidden`);
-  }
-  const popupType = cardElement.querySelector(`.popup__type`);
-  if (realEstateCard[`offer`][`type`]) {
-    popupType.textContent = TypeResidence[realEstateCard[`offer`][`type`]];
-  } else {
-    popupType.classList.add(`visually-hidden`);
-  }
-  const popupCapacity = cardElement.querySelector(`.popup__text--capacity`);
-  if (realEstateCard[`offer`][`rooms`]) {
-    popupCapacity.textContent = `${realEstateCard[`offer`][`rooms`]} комнаты для ${realEstateCard[`offer`][`guests`]} гостей`;
-  } else {
-    popupCapacity.classList.add(`visually-hidden`);
-  }
-  const popupTime = cardElement.querySelector(`.popup__text--time`);
-  if ((realEstateCard[`offer`][`checkin`]) && (realEstateCard[`offer`][`checkout`])) {
-    popupTime.textContent = `Заезд после ${realEstateCard[`offer`][`checkin`]}, выездо до ${realEstateCard[`offer`][`checkout`]}`;
-  } else {
-    popupTime.classList.add(`visually-hidden`);
-  }
-
-  // В разметке находим блок предоставления услуг
-  const popupFeatures = cardElement.querySelector(`.popup__features`);
-  // Удаляем все виды услуг из разметки
-  while (popupFeatures.firstChild) {
-    popupFeatures.removeChild(popupFeatures.firstChild);
-  }
-  if (realEstateCard[`offer`][`features`] && (realEstateCard[`offer`][`features`].length !== 0)) {
-    // Добавляем нужные услуги в разметку
-    realEstateCard[`offer`][`features`].forEach((item) => {
-      const elementFeature = document.createElement(`li`);
-      elementFeature.className = `popup__feature popup__feature--${item}`;
-      popupFeatures.appendChild(elementFeature);
-    });
-  } else {
-    popupFeatures.classList.add(`visually-hidden`);
-  }
-  const popupDescription = cardElement.querySelector(`.popup__description`);
-  if (realEstateCard[`offer`][`description`]) {
-    popupDescription.textContent = realEstateCard[`offer`][`description`];
-  } else {
-    popupDescription.classList.add(`visually-hidden`);
-  }
-  // Добавляем фотографии в карточку объекта недвижимости
-  const popupPhotos = cardElement.querySelector(`.popup__photos`);
-
-  if (realEstateCard[`offer`][`photos`] && (realEstateCard[`offer`][`photos`].length > 0)) {
-    realEstateCard[`offer`][`photos`].forEach((item) => {
-      const popupPhoto = popupPhotos.querySelector(`img`).cloneNode(true);
-      popupPhoto.src = item;
-      popupPhotos.appendChild(popupPhoto);
-    });
-    // Удаляем шаблонную фотокарточку.
-    popupPhotos.children[0].remove();
-  } else {
-    popupPhotos.classList.add(`visually-hidden`);
-  }
-
-  const popupAvatar = cardElement.querySelector(`.popup__avatar`);
-  if (realEstateCard[`author`][`avatar`]) {
-    popupAvatar.src = realEstateCard[`author`][`avatar`];
-  } else {
-    popupAvatar.classList.add(`visually-hidden`);
-  }
+  // Основной цикл по поляем карточек и вызов соотвествующей функции обработки
+  Object.getOwnPropertyNames(FieldClass).forEach((i) => {
+    const fieldCard = cardElement.querySelector(FieldClass[i]);
+    if (i === `avatar`) {
+      checkAvatarField(realEstateCard[`author`][i], fieldCard);
+    } else {
+      checkField(realEstateCard[`offer`], i, fieldCard);
+    }
+  });
 
   return cardElement;
 };
